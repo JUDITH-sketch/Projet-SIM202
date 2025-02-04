@@ -7,6 +7,7 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <set>
 
 using namespace std;
 
@@ -43,7 +44,14 @@ public:
     Graph() : nombreSommets(0) {}
     
     // Constructeur à partir d'une liste d'arcs
-    Graph(initializer_list<Arc> L) : nombreSommets(L.size()), listeArcs(L) {}
+    Graph(initializer_list<Arc> L) : listeArcs(L) {
+    set<int> sommets_uniques;
+    for (const auto& arc : L) {
+        sommets_uniques.insert(arc.S1);
+        sommets_uniques.insert(arc.S2);
+    }
+    nombreSommets = sommets_uniques.size();  // Nombre réel de sommets
+}
 
     // Renvoie la liste des voisins en aval d'un sommet donné (successeurs)
     vector<int> successeurs(int sommet) const {
