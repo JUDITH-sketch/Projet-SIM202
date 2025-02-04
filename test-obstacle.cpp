@@ -1,20 +1,25 @@
 #include "obstacle.hpp"
 
-int main(int argc, char *argv[]){
+int main() {
+    // Définition des points de base
+    Sommet e1(1, 0), e2(0, 1);
 
-    //base
-    Point e1(0,1); Point e2(1,0);
-    //l'ordre des points est importants
-    Point S1(0,0);    Point S2(0,2);    Point S3(2,2);    Point S4(2,0);
+    // Sommets de l'obstacle (ordre important)
+    Sommet S1(0, 0), S2(0, 2), S3(2, 2), S4(2, 0);
 
-    obstacle O({S1,S2,S3,S4}); //carré de longueur 2 
+    // Création de l'obstacle (carré de longueur 2)
+    Obstacle O({S1, S2, S3, S4});
+    std::cout << "Obstacle créé :\n";
 
-    Segment S(e1-e2,3*e2+e1); //segment (1,-1)->(1,3)
-    cout<<O.is_intersect(S)<<'\n'; //true  (1,0) et (1,2)
+    // Test d'intersection avec un segment qui traverse l'obstacle
+    Segment S(e1 - e2, e1 + 3.0 * e2); // Segment (1,-1) -> (1,3)
+    std::cout << "Segment testé : " << S << "\n";
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(S) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
 
-    Segment A(S1,2*e1); //segment (0,0)->(2,0)
-    // A.retourne();
-    cout<<A<<S<<'\n';
-    cout<<A.is_intersect(S)<<'\n'; //true (1,0)
+    // Test avec un segment aligné sur un bord de l'obstacle
+    Segment A(S1, S1 + 2.0 * e1); // Segment (0,0) -> (2,0)
+    std::cout << "\nSegment testé : " << A << "\n";
+    std::cout << "Intersection avec le premier segment ? " << (A.intersection(S) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE (intersection en (1,0))
 
+    return 0;
 }

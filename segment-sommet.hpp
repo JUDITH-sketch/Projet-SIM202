@@ -1,167 +1,96 @@
+#ifndef SEGMENT_SOMMET_HPP
+#define SEGMENT_SOMMET_HPP
+
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
 #include <cmath>
-#include <cstdlib>
-using namespace std;
 
+class Sommet {
+public:
+    double x, y;
 
-const double pi=4*atan(1.);
-typedef vector<double> vecteur; 
+    // Constructeurs
+    Sommet(double x = 0, double y = 0) : x(x), y(y) {}
 
-// classe point héritant de vector<double>
-class Point : public vector<double>
-{  protected: 
+    // Opérateurs mathématiques
+    Sommet operator+(const Sommet& autre) const {
+        return Sommet(x + autre.x, y + autre.y);
+    }
 
-   public:
-   int dim;
-   vector<double> coord;
-   Point()=default;
-   Point(double x) : vector<double>{x}              //constructeur point 1D
-   {
-      dim=1;
-      coord = vector(dim);
-      coord[1]=x;
-   }
-   Point(double x, double y) : vector<double>{x,y}  //constructeur point 2D
-   {
-      dim=2;
-      coord = vector(dim);
-      coord[0]=x;
-      coord[1]=y;
-   }
-};
-Point operator+(const Point& P1, const Point& P2)     // P1+P2
-{
-   if (P1.dim != P2.dim){ cout<<"erreur dimension"; exit(-1);}
-   Point P = Point(0,0 );
-   for(int k=0;k<P1.dim;k++){
-      P.coord[k]=P1.coord[k]+P2.coord[k];
-   }
-   return P;
-}
+    Sommet operator-(const Sommet& autre) const {
+        return Sommet(x - autre.x, y - autre.y);
+    }
 
-Point operator-(const Point& P1, const Point& P2)     // P1-P2
-{
-   if (P1.dim != P2.dim){ cout<<"erreur dimension"; exit(-1);}
-   Point P = Point(0,0 );
-   for(int k=0;k<P1.dim;k++){
-      P.coord[k]=P1.coord[k]-P2.coord[k];
-   }
-   return P;
-}
-Point operator*(const double a ,const Point& P2){
-   if(a==0){cout<<"multiplie par 0";exit(-1);}
-   Point P = Point(0,0 );
-   for(int k=0;k<P2.dim;k++){
-      P.coord[k]=P2.coord[k]*a;
-   }
-   return P;
-}
-double norme(const Point& P)                          // |P|
-{
-   double S=0;
-   for(int k=0;k<P.dim;k++){
-      S+= P.coord[k]*P.coord[k];
-   }
-   return sqrt(S);
-}
-ostream& operator<<(ostream& o, const Point& P)     // affichage (x1,x2,...)
-{
-   o<<"(";
-  for(int k=0; k<P.dim;k++){
-    o<<P.coord[k]<<",";
-  }
-  o<<")";
-  return o;
-}
+    // Opérateur unaire pour inverser un Sommet (-s)
+    Sommet operator-() const {
+        return Sommet(-x, -y);
+    }
 
-//classe Arc parent de Segment, ArcEllipse, ArcParametre
-class Arc
-{  public:
-   string type="test";
-   vector<Point> points;                                // extremites de l'arc
+    // Définition unique pour `Sommet * scalaire` et `scalaire * Sommet`
+    friend Sommet operator*(const Sommet& s, double scalaire) {
+        return Sommet(s.x * scalaire, s.y * scalaire);
+    }
+    
+    friend Sommet operator*(double scalaire, const Sommet& s) {
+        return s * scalaire; // Réutilisation de la première définition
+    }
 
+    // Norme du vecteur
+    double norme() const {
+        return std::sqrt(x * x + y * y);
+    }
 
-   virtual double longueur() const = 0;                 // longueur de l'arc
-   virtual Arc& retourne() = 0;                         // retourne l'arc
-   // virtual void exporte(ostream& out, int n) const = 0; // export de l'arc
-
-   
-};
-
-ostream& operator<<(ostream& o, const Arc& A){       //type : point de départ point d’arrivée
-   o<<A.type<<":"<<A.points[0]<<","<<A.points[1];
-   return o;
-}
-
-
-//classe Segment héritant de Arc
-
-class Segment : public Arc
-{
-   public:
-   
-
-   Segment(Point A,Point B)
-   {  
-   points =vector<Point>(2);
-   points[0]= A;
-   points[1]=B;
-   type ="Segment";
-   }
-
-
-   double longueur()const                               // longueur de l'arc
-   {return norme(points[0]-points[1]);}                       
-
-   Segment& retourne()                                     // retourne l'arc
-   {
-      Point x = points[0];
-      points[0]= points[1];
-      points[1]=x;
-      return *this;
-   }
-   
-   Point direction(){
-      Point A =points[1]-points[0];
-      return A;
-   }
-
-   Point normal(){
-      Point D = (*this).direction();
-      Point N(D.coord[1],-D.coord[0]);
-      return N;
-   }
-
-   bool is_intersect(Segment S){
-      Point X1=points[0]; Point X2 = points[1];
-      Point X3=S.points[0]; Point X4 = S.points[1];
-         cout<<'\n'<<"start (is_intersect)"<<'\n';
-         double a,b,c,d;
-         double k1,k2;
-         
-         a = X2.coord[0] - X1.coord[0]; b = X3.coord[0] - X4.coord[0];
-         c = X2.coord[1] - X1.coord[1]; d = X3.coord[1] - X4.coord[1];
-         k1 = X3.coord[0] - X1.coord[0]; k2 =  X3.coord[1] - X1.coord[1];
-
-         cout<<a<<b<<c<<d;
-         double det = a*d-b*c;
-         if(det !=0){
-             cout<<"d!=0"<<'\n';
-             double xk,yk; xk =1/det *(k1*d-k2*b); yk = 1/det *(k2*a-c*k1);
-              
-             cout<<"("<<xk<<","<<yk<<")";
-             if(0<=xk && xk<=1){
-                 cout<<"x bien paramétré"<<'\n';
-                 if(0<=yk && yk<=1){
-                     cout<<"y bien paramétré"<<'\n';
-                     cout<<"TRUE";
-                     return true;
-                    }
-                }
-            }
-        return false;
+    // Affichage
+    friend std::ostream& operator<<(std::ostream& os, const Sommet& s) {
+        os << "(" << s.x << ", " << s.y << ")";
+        return os;
     }
 };
+
+class Segment {
+public:
+    Sommet A, B;
+
+    // Constructeur
+    Segment(const Sommet& A, const Sommet& B) : A(A), B(B) {}
+
+    // Longueur du segment
+    double longueur() const {
+        return (B - A).norme();
+    }
+
+    // Direction du segment
+    Sommet direction() const {
+        return B - A;
+    }
+
+    // Normale au segment
+    Sommet normale() const {
+        Sommet dir = direction();
+        return Sommet(-dir.y, dir.x);  // Rotation de 90°
+    }
+
+    // Test d'intersection avec un autre segment en utilisant les normales
+    bool intersection(const Segment& S) const {
+        double a = B.x - A.x, b = S.A.x - S.B.x;
+        double c = B.y - A.y, d = S.A.y - S.B.y;
+        double det = a * d - b * c;
+
+        if (det == 0) return false; // Segments parallèles ou colinéaires
+
+        double k1 = S.A.x - A.x;
+        double k2 = S.A.y - A.y;
+
+        double t = (k1 * d - k2 * b) / det;
+        double u = (k2 * a - k1 * c) / det;
+
+        return (0 <= t && t <= 1 && 0 <= u && u <= 1);
+    }
+
+    // Affichage
+    friend std::ostream& operator<<(std::ostream& os, const Segment& S) {
+        os << "[" << S.A << " -> " << S.B << "]";
+        return os;
+    }
+};
+
+#endif // SEGMENT_SOMMET_HPP
