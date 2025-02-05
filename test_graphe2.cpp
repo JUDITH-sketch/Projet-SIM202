@@ -4,6 +4,7 @@
 using namespace std;
 
 int main() {
+    /*
     cout << "==== TEST GRAPHE ====" << endl;
 
     // Création du graphe avec A, B et un obstacle carré
@@ -38,4 +39,5 @@ int main() {
     cout << "Prédécesseurs de 2 : " << g.predecesseurs(1) << endl;
 
     return 0;
+    */
 }

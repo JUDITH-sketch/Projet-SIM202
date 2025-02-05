@@ -51,106 +51,6 @@ public:
         sommetsGraph.resize(nombreSommets);
     }
 
-    // Ajoute un sommet et retourne son index
-    int ajouterSommet(const Sommet& s, int obstacleID = -1) {
-        int index = sommetsGraph.size();
-        sommetsGraph.push_back(s);
-        sommetToObstacle[index] = obstacleID;
-        nombreSommets++;
-        return index;
-    }
-/*
-    // Ajoute un obstacle au graphe sans créer d'arcs immédiatement
-    void ajouterObstacle(const Obstacle& obstacle) {
-        int obstacleID = obstacles.size();
-        obstacles.push_back(obstacle);
-
-        std::vector<int> indices;
-        for (const auto& sommet : obstacle.sommets) {
-            int index = ajouterSommet(sommet, obstacleID);
-            indices.push_back(index);
-        }
-    }
-*/
-
-void ajouterObstacle(const Obstacle& obstacle) {
-    int obstacleID = obstacles.size();
-    obstacles.push_back(obstacle);
-
-    cout << "Adding obstacle " << obstacleID << " with " << obstacle.sommets.size() << " vertices" << endl;
-
-    for (size_t i = 0; i < obstacle.sommets.size(); i++) {
-        cout << "Obstacle vertex " << i << ": " << obstacle.sommets[i] << endl;
-    }
-
-    std::vector<int> indices;
-    for (const auto& sommet : obstacle.sommets) {
-        int index = ajouterSommet(sommet, obstacleID);
-        indices.push_back(index);
-    }
-}
-/*
-    // Vérifie si un arc est valide (ne traverse pas d'obstacle)
-    bool arcEstValide(int s1, int s2) const {
-        Segment seg(sommetsGraph[s1], sommetsGraph[s2]);
-        for (const auto& obstacle : obstacles) {
-            if (obstacle.intersection(seg)) return false;
-        }
-        return true;
-    }
-    */
-   bool arcEstValide(int s1, int s2) const {
-    Segment seg(sommetsGraph[s1], sommetsGraph[s2]);
-    cout << "Checking arc: " << s1 << " -> " << s2 << " (" << sommetsGraph[s1] << " -> " << sommetsGraph[s2] << ")" << endl;
-
-    bool blocked = false;
-    for (const auto& obstacle : obstacles) {
-        if (obstacle.intersection(seg)) {
-            cout << " ❌ Arc " << s1 << " -> " << s2 << " is INVALID (Blocked by obstacle)" << endl;
-            blocked = true;
-        }
-    }
-
-    if (!blocked) {
-        cout << " ✅ Arc " << s1 << " -> " << s2 << " is VALID" << endl;
-    }
-
-    return !blocked;
-}
-/*
-    // Génère automatiquement les arcs valides
-    void genererArcs() {
-        listeArcs.clear();
-        int n = sommetsGraph.size();
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (arcEstValide(i, j)) {
-                    double poids = (sommetsGraph[i] - sommetsGraph[j]).norme();
-                    listeArcs.push_back(Arc(i, j, poids));
-                }
-            }
-        }
-    }
-*/
-
-void genererArcs() {
-    listeArcs.clear();
-    int n = sommetsGraph.size();
-    cout << "Generating arcs for " << n << " vertices..." << endl;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (arcEstValide(i, j)) {
-                double poids = (sommetsGraph[i] - sommetsGraph[j]).norme();
-                listeArcs.push_back(Arc(i, j, poids));
-                cout << "✅ Arc added: " << i << " -> " << j << " (Weight: " << poids << ")" << endl;
-            }
-        }
-    }
-
-    cout << "Total arcs generated: " << listeArcs.size() << endl;
-}
-
     // Renvoie la liste des successeurs d'un sommet
     std::vector<int> successeurs(int sommet) const {
         std::vector<int> voisins;
@@ -212,3 +112,68 @@ std::ostream& operator<<(std::ostream& o, const std::vector<int>& voisins) {
 }
 
 #endif // ARC_GRAPH_HPP
+
+/*   // Ajoute un sommet et retourne son index
+    int ajouterSommet(const Sommet& s, int obstacleID = -1) {
+        int index = sommetsGraph.size();
+        sommetsGraph.push_back(s);
+        sommetToObstacle[index] = obstacleID;
+        nombreSommets++;
+        return index;
+    }
+
+
+void ajouterObstacle(const Obstacle& obstacle) {
+    int obstacleID = obstacles.size();
+    obstacles.push_back(obstacle);
+
+    cout << "Adding obstacle " << obstacleID << " with " << obstacle.sommets.size() << " vertices" << endl;
+
+    for (size_t i = 0; i < obstacle.sommets.size(); i++) {
+        cout << "Obstacle vertex " << i << ": " << obstacle.sommets[i] << endl;
+    }
+
+    std::vector<int> indices;
+    for (const auto& sommet : obstacle.sommets) {
+        int index = ajouterSommet(sommet, obstacleID);
+        indices.push_back(index);
+    }
+}
+
+   bool arcEstValide(int s1, int s2) const {
+    Segment seg(sommetsGraph[s1], sommetsGraph[s2]);
+    cout << "Checking arc: " << s1 << " -> " << s2 << " (" << sommetsGraph[s1] << " -> " << sommetsGraph[s2] << ")" << endl;
+
+    bool blocked = false;
+    for (const auto& obstacle : obstacles) {
+        if (obstacle.intersection(seg)) {
+            cout << " ❌ Arc " << s1 << " -> " << s2 << " is INVALID (Blocked by obstacle)" << endl;
+            blocked = true;
+        }
+    }
+
+    if (!blocked) {
+        cout << " ✅ Arc " << s1 << " -> " << s2 << " is VALID" << endl;
+    }
+
+    return !blocked;
+}
+
+
+void genererArcs() {
+    listeArcs.clear();
+    int n = sommetsGraph.size();
+    cout << "Generating arcs for " << n << " vertices..." << endl;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (arcEstValide(i, j)) {
+                double poids = (sommetsGraph[i] - sommetsGraph[j]).norme();
+                listeArcs.push_back(Arc(i, j, poids));
+                cout << "✅ Arc added: " << i << " -> " << j << " (Weight: " << poids << ")" << endl;
+            }
+        }
+    }
+
+    cout << "Total arcs generated: " << listeArcs.size() << endl;
+}*/
