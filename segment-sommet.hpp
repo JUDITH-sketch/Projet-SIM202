@@ -44,6 +44,11 @@ public:
         os << "(" << s.x << ", " << s.y << ")";
         return os;
     }
+
+    bool operator==(const Sommet& other) const {
+    return (x == other.x) && (y == other.y);
+}
+
 };
 
 class Segment {
@@ -91,6 +96,11 @@ public:
         os << "[" << S.A << " -> " << S.B << "]";
         return os;
     }
+
+    bool operator==(const Segment& other) const {
+    return (A == other.A && B == other.B) || (A == other.B && B == other.A);
+}
+
 };
 
 #endif // SEGMENT_SOMMET_HPP

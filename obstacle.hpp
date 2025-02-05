@@ -5,6 +5,7 @@
 #include <iostream>
 #include "segment-sommet.hpp"
 
+using namespace std;
 class Obstacle {
 public:
     std::vector<Sommet> sommets;  // Sommets définissant l'obstacle
@@ -27,7 +28,7 @@ public:
             normales.push_back(seg.normale());
         }
     }
-
+/*
     // Vérifie si un segment coupe l'obstacle
     bool intersection(const Segment& S) const {
         int n = sommets.size();
@@ -39,6 +40,26 @@ public:
         }
         return false;
     }
+    */
+bool intersection(const Segment& s) const {
+    for (size_t i = 0; i < sommets.size(); i++) {
+        Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
+        
+        // Allow obstacle's own edges but block true intersections
+        if (s == edge) {
+            cout << " ✅ Segment " << s << " is an OBSTACLE EDGE and is ALLOWED" << endl;
+            continue;  // Skip if the segment is an actual edge of the obstacle
+        }
+
+        if (edge.intersection(s)) {
+            cout << " ❌ Segment " << s << " STRICTLY INTERSECTS obstacle edge " << edge << endl;
+            return true;
+        }
+    }
+    return false;
+}
+
+
 };
 
 #endif // OBSTACLE_HPP
