@@ -40,4 +40,25 @@ int main() {
 
     return 0;
     */
+
+    cout << "==== TEST GRAPHE ====" << endl;
+
+    // Définition des points A et B
+    Sommet A(-1, 0.75);
+    Sommet B(2, 0.75);
+
+    // Définition d'un obstacle carré
+    vector<vector<Sommet>> obstacles = {
+        {Sommet(0, 0), Sommet(1, 0), Sommet(1, 1), Sommet(0, 1)}
+    };
+
+    // Création du graphe
+    Graph g(A, B, obstacles);
+
+    // Affichage du nombre de sommets
+    cout << "Nombre de sommets : " << g.nombreSommets << endl;
+
+    return 0;
+
+ 
 }

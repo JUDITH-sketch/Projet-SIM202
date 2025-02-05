@@ -2,104 +2,96 @@
 #define ARC_GRAPH_HPP
 
 #include <iostream>
-#include <unordered_map>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 #include <set>
-#include "segment-sommet.hpp"
-#include "obstacle.hpp"
 
 using namespace std;
 
 // Classe représentant un arc dans le graphe
 class Arc {
 public:
-    int S1;  // Sommet de départ
-    int S2;  // Sommet d'arrivée
+    int S1; // Sommet de départ
+    int S2; // Sommet d'arrivée
     double Poids;
-
-    // Constructeurs
+    
+    // Constructeur avec poids par défaut
     Arc(int s1, int s2) : S1(s1), S2(s2), Poids(1) {}
+    
+    // Constructeur avec poids spécifié
     Arc(int s1, int s2, double val) : S1(s1), S2(s2), Poids(val) {}
 
-    // Accesseurs
+    // Renvoie le sommet de départ de l'arc
     int pred() const { return S1; }
+    
+    // Renvoie le sommet d'arrivée de l'arc
     int succ() const { return S2; }
+    
+    // Renvoie la valeur (poids) de l'arc
     double poids() const { return Poids; }
 };
 
 // Classe représentant un graphe sous forme de liste d'arcs
 class Graph {
 public:
-    std::vector<Arc> listeArcs;           // Liste des arcs du graphe
-    std::vector<Sommet> sommetsGraph;     // Liste des sommets du graphe
-    std::unordered_map<int, int> sommetToObstacle; // Associe chaque sommet à un obstacle (-1 = libre)
-    std::vector<Obstacle> obstacles;      // Liste des obstacles du graphe
-    int nombreSommets;                    // Nombre total de sommets dans le graphe
+    int nombreSommets; // Nombre total de sommets dans le graphe
+    vector<Arc> listeArcs; // Liste des arcs du graphe
 
     // Constructeur par défaut
     Graph() : nombreSommets(0) {}
-
-    // Constructeur à partir d'une liste d'arcs (sans gestion d'obstacles)
-    Graph(std::initializer_list<Arc> L) : listeArcs(L) {
-        std::set<int> sommets_uniques;
-        for (const auto& arc : L) {
-            sommets_uniques.insert(arc.S1);
-            sommets_uniques.insert(arc.S2);
-        }
-        nombreSommets = sommets_uniques.size();
-        sommetsGraph.resize(nombreSommets);
+    
+    // Constructeur à partir d'une liste d'arcs
+    Graph(initializer_list<Arc> L) : listeArcs(L) {
+    set<int> sommets_uniques;
+    for (const auto& arc : L) {
+        sommets_uniques.insert(arc.S1);
+        sommets_uniques.insert(arc.S2);
     }
+    nombreSommets = sommets_uniques.size();  // Nombre réel de sommets
+}
 
-    // Renvoie la liste des successeurs d'un sommet
-    std::vector<int> successeurs(int sommet) const {
-        std::vector<int> voisins;
+    // Renvoie la liste des voisins en aval d'un sommet donné (successeurs)
+    vector<int> successeurs(int sommet) const {
+        vector<int> voisins;
         for (const auto &arc : listeArcs) {
             if (sommet == arc.pred()) {
-                voisins.push_back(arc.succ());
+                voisins.emplace_back(arc.succ());
             }
         }
         return voisins;
     }
 
-    // Renvoie la liste des prédécesseurs d'un sommet
-    std::vector<int> predecesseurs(int sommet) const {
-        std::vector<int> voisins;
+    // Renvoie la liste des voisins en amont d'un sommet donné (prédécesseurs)
+    vector<int> predecesseurs(int sommet) const {
+        vector<int> voisins;
         for (const auto &arc : listeArcs) {
             if (sommet == arc.succ()) {
-                voisins.push_back(arc.pred());
+                voisins.emplace_back(arc.pred());
             }
         }
         return voisins;
     }
 
-    // Renvoie la liste de tous les voisins d'un sommet
-    std::vector<int> voisins(int sommet) const {
-        std::vector<int> voisins;
+    // Renvoie la liste de tous les voisins (entrants et sortants) d'un sommet donné
+    vector<int> voisins(int sommet) const {
+        vector<int> voisins;
         for (const auto &arc : listeArcs) {
             if (sommet == arc.succ()) {
-                voisins.push_back(arc.pred());
+                voisins.emplace_back(arc.pred());
             }
             if (sommet == arc.pred()) {
-                voisins.push_back(arc.succ());
+                voisins.emplace_back(arc.succ());
             }
         }
         return voisins;
-    }
-
-    // Renvoie les coordonnées d'un sommet
-    Sommet getCoordonnees(int index) const {
-        return sommetsGraph.at(index);
-    }
-
-    // Vérifie si un sommet appartient à un obstacle
-    bool estSommetObstacle(int index) const {
-        return sommetToObstacle.find(index) != sommetToObstacle.end();
     }
 };
 
-// Surcharge de l'opérateur d'affichage pour une liste de voisins
-std::ostream& operator<<(std::ostream& o, const std::vector<int>& voisins) {
+// Surcharge de l'opérateur d'affichage pour afficher une liste de voisins
+ostream& operator<<(ostream& o, const vector<int>& voisins) {
     o << "(";
     for (size_t k = 0; k < voisins.size(); ++k) {
         o << voisins[k];
@@ -113,7 +105,13 @@ std::ostream& operator<<(std::ostream& o, const std::vector<int>& voisins) {
 
 #endif // ARC_GRAPH_HPP
 
-/*   // Ajoute un sommet et retourne son index
+/*   
+
+    std::vector<Sommet> sommetsGraph;     // Liste des sommets du graphe
+    std::unordered_map<int, int> sommetToObstacle; // Associe chaque sommet à un obstacle (-1 = libre)
+    std::vector<Obstacle> obstacles;      // Liste des obstacles du graphe
+
+// Ajoute un sommet et retourne son index
     int ajouterSommet(const Sommet& s, int obstacleID = -1) {
         int index = sommetsGraph.size();
         sommetsGraph.push_back(s);
@@ -159,6 +157,15 @@ void ajouterObstacle(const Obstacle& obstacle) {
     return !blocked;
 }
 
+    // Renvoie les coordonnées d'un sommet
+    Sommet getCoordonnees(int index) const {
+        return sommetsGraph.at(index);
+    }
+
+    // Vérifie si un sommet appartient à un obstacle
+    bool estSommetObstacle(int index) const {
+        return sommetToObstacle.find(index) != sommetToObstacle.end();
+    }
 
 void genererArcs() {
     listeArcs.clear();
