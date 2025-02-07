@@ -47,12 +47,12 @@ bool intersection(const Segment& s) const {
         
         // Allow obstacle's own edges but block true intersections
         if (s == edge) {
-            cout << " ✅ Segment " << s << " is an OBSTACLE EDGE and is ALLOWED" << endl;
+            // cout << " ✅ Segment " << s << " is an OBSTACLE EDGE and is ALLOWED" << endl;
             continue;  // Skip if the segment is an actual edge of the obstacle
         }
 
         if (edge.intersection(s)) {
-            cout << " ❌ Segment " << s << " STRICTLY INTERSECTS obstacle edge " << edge << endl;
+            // cout << " ❌ Segment " << s << " STRICTLY INTERSECTS obstacle edge " << edge << endl;
             return true;
         }
     }
