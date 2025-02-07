@@ -87,8 +87,12 @@ public:
 
         double t = (k1 * d - k2 * b) / det;
         double u = (k2 * a - k1 * c) / det;
-
-        return (0 <= t && t <= 1 && 0 <= u && u <= 1);
+        
+        bool t1, t2;
+        if(0<t && t<1){t1=true;}
+        if(0<u && u<1){t2=true;}
+        if(t1 && t2){return true;}
+        return false;
     }
 
     // Affichage
