@@ -53,6 +53,18 @@ public:
     nombreSommets = sommets_uniques.size();  // Nombre réel de sommets
 }
 
+// Ajoute un arc au graph
+    void add(Arc A){
+        listeArcs.emplace_back(A);
+        set<int> sommets_uniques;
+        for (const auto& arc : listeArcs){
+        sommets_uniques.insert(arc.S1);
+        sommets_uniques.insert(arc.S2);
+    }
+    nombreSommets = sommets_uniques.size(); 
+    }
+};
+
     // Renvoie la liste des voisins en aval d'un sommet donné (successeurs)
     vector<int> successeurs(int sommet) const {
         vector<int> voisins;
@@ -102,6 +114,24 @@ ostream& operator<<(ostream& o, const vector<int>& voisins) {
     o << ")";
     return o;
 }
+
+// ============== Operateur de sortie ==============
+
+// sortie graph
+ostream& operator<<(ostream& o, const Graph& G){
+    o<<"le graph comporte les arcs suivants : "<<'\n';
+    for(auto& arc : G.listeArcs){
+        o<<arc<<'\n';
+    }
+    return o;
+}
+
+// sortie Arc
+ostream& operator<<(ostream& os, const Arc& A) {
+    os << "[" << A.S1 << " -> " << A.S2 << "]" <<'('<<A.Poids<<')';
+    return os;
+}
+
 
 #endif // ARC_GRAPH_HPP
 
