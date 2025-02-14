@@ -40,6 +40,10 @@ ostream& operator<<(ostream& os, const Arc& A) {
     return os;
 }
 
+Arc inverse ( const Arc A) { //renverse l'origine de l'arc et son arrivée
+    Arc B(A.S2,A.S1,A.poids());
+    return B;
+}
 
 // Classe représentant un graphe sous forme de liste d'arcs
 class Graph {
