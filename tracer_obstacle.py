@@ -44,4 +44,3 @@ graphe_polygones = {
 
 
 tracer_polygones(graphe_polygones) #test
- 
