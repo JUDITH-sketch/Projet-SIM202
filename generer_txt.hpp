@@ -1,14 +1,19 @@
+#ifndef GENERER_TXT_HPP
+#define GENERER_TXT_HPP
+
 #include <iostream>
 #include <fstream>
-#include "generer_graphe.hpp"
+#include <vector>
+#include <algorithm>
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
+#include "generer_graphe.hpp"
 #include "dijkstra.hpp"
 
 using namespace std;
 
 // Fonction pour exporter les données du graphe dans un fichier
-void export_graph_to_file(const string& filename, const GraphData& graphData, const Sommet& D, const Sommet& A) {
+inline void exporter_graphe_vers_fichier(const string& filename, const GraphData& graphData, const Sommet& D, const Sommet& A) {
     ofstream file(filename);
 
     if (!file) {
@@ -38,12 +43,32 @@ void export_graph_to_file(const string& filename, const GraphData& graphData, co
         file << "ARC " << arc.pred() << " " << arc.succ() << "\n";
     }
 
+    // ========= Ajout du plus court chemin =========
+    // Calcul du plus court chemin avec Dijkstra
+    pair<vector<double>, vector<int>> dijkstra_result = dijkstra(G, 0);
+    vector<int> predecessors = dijkstra_result.second;
+
+    // Reconstruction du chemin
+    vector<Sommet> chemin_plus_court;
+    int current = list_indice.back(); // Indice du sommet d'arrivée
+    while (current != -1) {
+        chemin_plus_court.push_back(list_sommet[current]);
+        current = predecessors[current];
+    }
+    reverse(chemin_plus_court.begin(), chemin_plus_court.end()); // Remettre le chemin dans l'ordre correct
+
+    // Écriture du chemin dans le fichier
+    file << "CHEMIN_PLUS_COURT\n";
+    for (const auto& point : chemin_plus_court) {
+        file << point.x << " " << point.y << "\n";
+    }
+
     file.close();
     cout << "Données du graphe exportées avec succès dans " << filename << endl;
 }
 
 // Fonction pour afficher les trois listes
-void afficher_listes(const GraphData& graphData) {
+inline void afficher_listes(const GraphData& graphData) {
     cout << "\n===== Liste des Indices =====\n";
     for (int i : graphData.list_indice) {
         cout << i << " ";
@@ -63,26 +88,4 @@ void afficher_listes(const GraphData& graphData) {
     cout << "\n";
 }
 
-int main() {
-    // ========== Initialisation des Sommets ==========
-    Sommet A(1, 4);
-    Sommet B(7, 2);
-
-    // ========== Définition de l'Obstacle ==========
-    Sommet S11(3, 0), S12(6, 0), S13(6, 3), S14(3, 3);
-    Obstacle O1({S11, S12, S13, S14});
-    Gobstacle G01(O1, 1);
-
-    // ========== Construction du Graphe ==========
-    cout << "\n===== Construction du Graphe =====\n";
-    GraphData graphData = to_graph_Naive_2(A, B, {G01});
-    cout << "====== Graphe terminé ======\n\n";
-
-    // ========== Affichage des trois listes ==========
-    afficher_listes(graphData);
-
-    // ========== Exportation du Graphe ==========
-    export_graph_to_file("graph_data.txt", graphData, A, B);
-
-    return 0;
-}
+#endif // GENERER_TXT_HPP

@@ -1,3 +1,6 @@
+#ifndef GENERER_GRAPHE_HPP
+#define GENERER_GRAPHE_HPP
+
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
 
@@ -139,3 +142,5 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 
     return {G, list_sommet, list_indice, list_ref};
 }
+
+#endif // GENERER_GRAPHE_HPP
