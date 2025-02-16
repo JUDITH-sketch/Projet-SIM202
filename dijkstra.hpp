@@ -5,7 +5,7 @@
 #include <vector>
 #include <limits>
 #include <set>
-#include "arc-graph.hpp"
+#include "arc_graph.hpp"
 
 using namespace std;
 

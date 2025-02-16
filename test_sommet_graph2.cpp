@@ -1,6 +1,6 @@
 #include <iostream>
-#include "sommet_graph_N2.hpp"
-#include "arc-graph.hpp"
+#include "sommet_graph_v2.hpp"
+#include "arc_graph.hpp"
 #include "obstacle.hpp"
 #include "dijkstra.hpp"
 

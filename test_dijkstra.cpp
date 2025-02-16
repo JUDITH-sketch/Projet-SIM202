@@ -1,5 +1,5 @@
 #include <iostream>
-#include "arc-graph.hpp"
+#include "arc_graph.hpp"
 #include "dijkstra.hpp"
 
 int main() {

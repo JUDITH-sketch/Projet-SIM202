@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-#include "segment-sommet.hpp"
+#include "segment_sommet.hpp"
 
 using namespace std;
 class Obstacle {

@@ -1,4 +1,4 @@
-#include "arc-graph.hpp"
+#include "arc_graph.hpp"
 using namespace std;
 int main() {
     cout << "==== TEST GRAPHE ====" << std::endl;
