@@ -2,14 +2,10 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 def lire_graphe(fichier):
-    """
-    Lit les données du fichier `graph_data.txt` et extrait :
-    - Le point de départ et d'arrivée
-    - Les sommets des obstacles (classés par référence)
-    """
+    """Lit un fichier et extrait les points de départ, d'arrivée et les obstacles."""
     depart, arrivee = None, None
     sommets = []
-    obstacles_groupes = defaultdict(list)  # Dictionnaire pour stocker les obstacles par référence
+    obstacles = defaultdict(list)  # Dictionnaire pour regrouper les sommets des obstacles par référence
 
     with open(fichier, "r") as file:
         for ligne in file:
@@ -19,65 +15,46 @@ def lire_graphe(fichier):
 
             type_donnee = elements[0]
 
-            # Lecture du point de départ
             if type_donnee == "DEBUT":
-                depart = (float(elements[1]), float(elements[2]))
-
-            # Lecture du point d'arrivée
+                depart = tuple(map(float, elements[1:3]))  # Convertit les coordonnées en tuple (x, y)
             elif type_donnee == "FIN":
-                arrivee = (float(elements[1]), float(elements[2]))
-
-            # Ignore l'en-tête "SOMMETS"
-            elif type_donnee == "SOMMETS":
-                continue  
-
-            # Lecture des sommets (points du graphe)
+                arrivee = tuple(map(float, elements[1:3]))  # Convertit les coordonnées en tuple (x, y)
             elif type_donnee == "SOMMET":
-                idx, x, y, ref = int(elements[1]), float(elements[2]), float(elements[3]), int(elements[4])
-                sommets.append((x, y, ref))
-                
-                # Stocke les points d'obstacles selon leur référence
+                _, x, y, ref = map(float, elements[1:])  # Extrait les coordonnées et la référence
+                sommets.append((x, y, int(ref)))  # Stocke les sommets avec leur référence
                 if ref >= 1:
-                    obstacles_groupes[ref].append((x, y))
+                    obstacles[int(ref)].append((x, y))  # Regroupe les sommets des obstacles par référence
 
-    return depart, arrivee, sommets, obstacles_groupes
+    return depart, arrivee, sommets, obstacles
 
 def tracer_graphe(fichier):
-    """
-    Trace le graphe à partir des données lues dans `graph_data.txt`
-    - Affiche les points de départ (vert) et d'arrivée (rouge)
-    - Relie les sommets des obstacles pour former des formes fermées
-    - Remplit les zones des obstacles en gris
-    """
-    depart, arrivee, sommets, obstacles_groupes = lire_graphe(fichier)
+    """Trace un graphe avec obstacles, départ et arrivée."""
+    depart, arrivee, sommets, obstacles = lire_graphe(fichier)
 
     plt.figure(figsize=(8, 6))
 
-    # Trace et remplit chaque obstacle séparément
-    for ref, points in obstacles_groupes.items():
+    # Trace les obstacles sous forme de polygones remplis
+    for points in obstacles.values():
         x_vals, y_vals = zip(*points)  # Sépare les coordonnées X et Y
+        plt.fill(x_vals + (x_vals[0],), y_vals + (y_vals[0],), color="gray", alpha=0.5)  # Remplit l'obstacle
 
-        # Remplissage de la zone de l'obstacle en gris clair
-        plt.fill(x_vals + (x_vals[0],), y_vals + (y_vals[0],), color="gray", alpha=0.5)
+    # Affichage des points de départ et d'arrivée avec une légende
+    plt.scatter(*depart, color="green", s=100, label="Départ")  # Départ en vert
+    plt.scatter(*arrivee, color="red", s=100, label="Arrivée")  # Arrivée en rouge
 
-        # Tracé du contour de l'obstacle en noir
-        #plt.plot(x_vals + (x_vals[0],), y_vals + (y_vals[0],), "black", linewidth=1.5)  
-
-    # Affichage des points du graphe
+    # Affichage des sommets des obstacles (en noir)
     for x, y, ref in sommets:
-        if ref == 0:  # Point de départ
-            plt.scatter(x, y, color="green", s=100, label="Départ" if "Départ" not in plt.gca().get_legend_handles_labels()[1] else "")
-        elif ref == -1:  # Point d'arrivée
-            plt.scatter(x, y, color="red", s=100, label="Arrivée" if "Arrivée" not in plt.gca().get_legend_handles_labels()[1] else "")
-        elif ref >= 1:  # Points des obstacles
-            plt.scatter(x, y, color="black", s=50)
+        if ref >= 1:
+            plt.scatter(x, y, color="black", s=50)  # Points des obstacles en noir
 
-    # Personnalisation du tracé
-    plt.legend()
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.title("Visualisation du Graphe - Départ, Arrivée et Obstacles")
-    plt.grid(True)
+    # Personnalisation du graphique
+    plt.legend()  # Ajoute une légende
+    plt.xlabel("X")  # Nom de l'axe X
+    plt.ylabel("Y")  # Nom de l'axe Y
+    plt.title("Visualisation du Graphe")  # Titre du graphique
+    plt.grid(True)  # Active la grille pour une meilleure lisibilité
+
+    # Affichage du graphique
     plt.show()
 
 # Exécuter la visualisation
