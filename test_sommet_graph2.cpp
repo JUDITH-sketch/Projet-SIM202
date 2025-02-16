@@ -11,9 +11,6 @@ int main() {
     Sommet A(1, 4);
     Sommet B(7, 2);
 
-    Node An(A, 0);
-    Node Bn(B, 1);
-
     // ========== Définition de l'Obstacle ==========
     Sommet S11(3, 0), S12(6, 0), S13(6, 3), S14(3, 3);
     Obstacle O1({S11, S12, S13, S14});
@@ -21,15 +18,30 @@ int main() {
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
-    Graph G = to_graph_Naive_2(A, B, {G01});
+    GraphData graphData = to_graph_Naive_2(A, B, {G01});
     cout << "====== Graphe terminé ======\n\n";
+
+    // Extract the graph, nodes, and references
+    Graph& G = graphData.G;
+    vector<Sommet>& list_sommet = graphData.list_sommet;
+    vector<int>& list_indice = graphData.list_indice;
+    vector<int>& list_ref = graphData.list_ref;
+
+    // ========== Affichage des Sommets ==========
+    cout << "Liste des Sommets :\n";
+    for (size_t i = 0; i < list_sommet.size(); i++) {
+        cout << "Sommet " << list_indice[i] << " : (" 
+             << list_sommet[i].x << ", " << list_sommet[i].y 
+             << "), Réf: " << list_ref[i] << "\n";
+    }
+    cout << "\n";
 
     // ========== Affichage des Voisins ==========
     cout << "Voisins du point de départ (0) :\n";
     cout << "   " << G.voisins(0) << "\n\n";
 
-    cout << "Voisins du point d'arrivée (" << G.nombreSommets - 1 << ") :\n";
-    cout << "   " << G.voisins(G.nombreSommets - 1) << "\n\n";
+    cout << "Voisins du point d'arrivée (" << list_indice.back() << ") :\n";
+    cout << "   " << G.voisins(list_indice.back()) << "\n\n";
 
     cout << "Voisins d'un point obstacle (2) :\n";
     cout << "   " << G.voisins(2) << "\n\n";

@@ -6,8 +6,16 @@ typedef pair<Obstacle, int> Gobstacle;
 
 using namespace std;
 
+// Structure to return multiple values
+struct GraphData {
+    Graph G;
+    vector<Sommet> list_sommet;
+    vector<int> list_indice;
+    vector<int> list_ref;
+};
+
 // On assume qu'un obstacle ne possède pas plus de 100 points
-Graph to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs) {
+GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs) {
     Graph G;
 
     // ----------- Initialisation des listes ---------------
@@ -15,7 +23,7 @@ Graph to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Go
     for (auto& obs : list_gobs) {
         n += obs.first.sommets.size();
     }
-    
+
     int nb_sommet = n;  // Nombre total de sommets dans le graphe
     vector<Sommet> list_sommet(n + 1);
     vector<int> list_indice(n + 1);
@@ -30,8 +38,6 @@ Graph to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Go
             k++;
         }
     }
-
-    cout << nb_sommet;
 
     list_sommet[0] = D;
     list_indice[0] = 0;
@@ -60,7 +66,7 @@ Graph to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Go
             if (ref_prem != nb_sommet - 1) { // N'envoie pas le dernier sommet sur lui-même
                 Segment iter_seg(list_sommet[k], list_sommet[ref_prem]);
                 Arc iter_arc(list_indice[k], list_indice[ref_prem], iter_seg.longueur());
-                
+
                 cout << iter_seg << '\n';
                 G.add(iter_arc);
                 G.add(inverse(iter_arc));
@@ -131,5 +137,5 @@ Graph to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Go
         }
     }
 
-    return G;
+    return {G, list_sommet, list_indice, list_ref};
 }
