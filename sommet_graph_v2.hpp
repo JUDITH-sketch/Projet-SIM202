@@ -25,9 +25,9 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
     }
 
     int nb_sommet = n;  // Nombre total de sommets dans le graphe
-    vector<Sommet> list_sommet(n + 1);
-    vector<int> list_indice(n + 1);
-    vector<int> list_ref(n + 1);
+    vector<Sommet> list_sommet(n);
+    vector<int> list_indice(n);
+    vector<int> list_ref(n);
 
     int k = 1;
     for (auto& obst : list_gobs) {
