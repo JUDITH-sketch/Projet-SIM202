@@ -4,48 +4,63 @@
 #include "obstacle.hpp"
 #include "dijkstra.hpp"
 
-int main(){
+using namespace std;
 
-Sommet A(1,4);
-Sommet B(7,2);
+int main() {
+    // ========== Initialisation des Sommets ==========
+    Sommet A(1, 4);
+    Sommet B(7, 2);
 
-Node An (A,0);
-Node Bn (B,1);
+    Node An(A, 0);
+    Node Bn(B, 1);
 
-Sommet S11(3,0), S12(6,0), S13(6,3), S14(3,3);
+    // ========== Définition de l'Obstacle ==========
+    Sommet S11(3, 0), S12(6, 0), S13(6, 3), S14(3, 3);
+    Obstacle O1({S11, S12, S13, S14});
+    Gobstacle G01(O1, 1);
 
-Obstacle O1({S11,S12,S13,S14});
+    // ========== Construction du Graphe ==========
+    cout << "\n===== Construction du Graphe =====\n";
+    Graph G = to_graph_Naive_2(A, B, {G01});
+    cout << "====== Graphe terminé ======\n\n";
 
-Gobstacle G01 (O1,1);
-cout<<"=====construction du graph===="<<'\n';
-Graph G=to_graph_Naive_2(A,B,{G01});
-cout<<"======graph fini ======"<<'\n';
-// cout<<"on obtiens le graph suivant : "<<G;
+    // ========== Affichage des Voisins ==========
+    cout << "Voisins du point de départ (0) :\n";
+    cout << "   " << G.voisins(0) << "\n\n";
 
-cout<<"voisins du point de départ : "<<G.voisins(0)<<'\n';
-cout<<"voisins du point d'arrivé : "<<G.voisins(G.nombreSommets-1)<<'\n';
+    cout << "Voisins du point d'arrivée (" << G.nombreSommets - 1 << ") :\n";
+    cout << "   " << G.voisins(G.nombreSommets - 1) << "\n\n";
 
-cout<<"voisins d'un point obstacle "<<G.voisins(2)<<'\n';
-cout<<"voisins d'un point obstacle "<<G.voisins(1)<<'\n';
+    cout << "Voisins d'un point obstacle (2) :\n";
+    cout << "   " << G.voisins(2) << "\n\n";
 
-cout<<G;
+    cout << "Voisins d'un point obstacle (1) :\n";
+    cout << "   " << G.voisins(1) << "\n\n";
 
-cout<<"====== test dijkstra ====="<<'\n';
-cout<<"test 1";
-auto [l, p] = dijkstra(G, 0);
-cout<<"test 2";
+    cout << "====== Affichage du Graphe ======\n";
+    cout << G << "\n\n";
 
-// Affichage des distances minimales
-cout << "Distances minimales (l) :\n";
-for (size_t i = 0; i < G.nombreSommets; i++) {
-    std::cout << "l[" << i << "] = " << l[i] << "\n";
-}
+    // ========== Exécution de Dijkstra ==========
+    cout << "====== Test de Dijkstra ======\n";
+    cout << "Début du test...\n";
+    
+    auto [l, p] = dijkstra(G, 0);
+    
+    cout << "Test terminé !\n\n";
 
-// Affichage des prédécesseurs
-cout << "\nPrédécesseurs (p) :\n";
-for (size_t i = 0; i < G.nombreSommets; i++) {
-    cout << "p[" << i << "] = " << p[i] << "\n";
-}
+    // ========== Affichage des Distances Minimales ==========
+    cout << "Distances minimales (l) :\n";
+    for (size_t i = 0; i < G.nombreSommets; i++) {
+        cout << "   l[" << i << "] = " << l[i] << "\n";
+    }
 
+    // ========== Affichage des Prédécesseurs ==========
+    cout << "\nPrédécesseurs (p) :\n";
+    for (size_t i = 0; i < G.nombreSommets; i++) {
+        cout << "   p[" << i << "] = " << p[i] << "\n";
+    }
 
+    cout << "\nFin du programme\n";
+
+    return 0;
 }
