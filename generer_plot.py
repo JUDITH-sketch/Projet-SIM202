@@ -9,7 +9,7 @@ def lire_graphe(fichier):
 
     with open(fichier, "r") as file:
         for ligne in file:
-            elements = ligne.strip().split()
+            elements = ligne.strip().split() # Supprime les espaces en début/fin de ligne et divise le texte en une liste de mots
             if not elements:
                 continue  # Ignore les lignes vides
 
@@ -18,7 +18,7 @@ def lire_graphe(fichier):
             if type_donnee == "DEBUT":
                 depart = tuple(map(float, elements[1:3]))  # Convertit les coordonnées en tuple (x, y)
             elif type_donnee == "FIN":
-                arrivee = tuple(map(float, elements[1:3]))  # Convertit les coordonnées en tuple (x, y)
+                arrivee = tuple(map(float, elements[1:3]))  
             elif type_donnee == "SOMMET":
                 _, x, y, ref = map(float, elements[1:])  # Extrait les coordonnées et la référence
                 sommets.append((x, y, int(ref)))  # Stocke les sommets avec leur référence
@@ -48,14 +48,11 @@ def tracer_graphe(fichier):
             plt.scatter(x, y, color="black", s=50)  # Points des obstacles en noir
 
     # Personnalisation du graphique
-    plt.legend()  # Ajoute une légende
-    plt.xlabel("X")  # Nom de l'axe X
-    plt.ylabel("Y")  # Nom de l'axe Y
-    plt.title("Visualisation du Graphe")  # Titre du graphique
-    plt.grid(True)  # Active la grille pour une meilleure lisibilité
-
-    # Affichage du graphique
+    plt.legend()  
+    plt.xlabel("X")  
+    plt.ylabel("Y")  
+    plt.title("Visualisation du Graphe")  
+    plt.grid(True)  
     plt.show()
 
-# Exécuter la visualisation
 tracer_graphe("graph_data.txt")
