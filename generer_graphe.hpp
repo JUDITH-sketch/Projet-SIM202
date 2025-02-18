@@ -95,8 +95,8 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         bool inter_SA = false;
 
         for (auto& gobs : list_gobs) {
-            if (gobs.first.intersection(DS)) inter_DS = true;cout<<"";
-            if (gobs.first.intersection(SA)) inter_SA = true;cout<<";"; // rajouter des cout !!
+            if (gobs.first.intersection(DS)) inter_DS = true;cout<<" ";
+            if (gobs.first.intersection(SA)) inter_SA = true;cout<<" "; // rajouter des cout !!
         }
 
         Arc DS_arc(list_indice[i], list_indice[0], DS.longueur());
@@ -120,7 +120,6 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         cout << "\n----------------- Obstacle Externe Obstacles -------------\n";
 
         for (int j = 1; j < nb_sommet - 1; j++) { // Boucle sur les sommets non extrêmes
-            cout << j;
             if (list_ref[i] != list_ref[j]) { // Différents obstacles
                 Segment iter_seg(list_sommet[i], list_sommet[j]);
                 bool inter = false; // Innocent jusqu'à preuve du contraire
