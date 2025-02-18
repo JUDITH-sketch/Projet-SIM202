@@ -14,7 +14,7 @@ int main() {
 
     // ========== Définition de l'Obstacle ==========
     Sommet S1(-0.5, 0), S2(0.5, 0), S3(0.5, 3), S4(-0.5, 3);
-    Obstacle O1({S11, S12, S13, S14});
+    Obstacle O1({S1, S2, S3, S4});
     Gobstacle G01(O1, 1);
 
     // ========== Construction du Graphe ==========
