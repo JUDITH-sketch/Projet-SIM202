@@ -96,7 +96,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 
         for (auto& gobs : list_gobs) {
             if (gobs.first.intersection(DS)) inter_DS = true;
-            if (gobs.first.intersection(SA)) inter_SA = true;
+            if (gobs.first.intersection(SA)) inter_SA = true; // rajouter des cout !!
         }
 
         Arc DS_arc(list_indice[i], list_indice[0], DS.longueur());
