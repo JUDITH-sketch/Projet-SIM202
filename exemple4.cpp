@@ -9,8 +9,8 @@ using namespace std;
 
 int main() {
     // ========== Initialisation des Sommets ==========
-    Sommet A(-2, 2);
-    Sommet B(2, 1);
+    Sommet A(-1.5, 1.5);
+    Sommet B(1.5, 1.5);
 
     // ========== Définition de l'Obstacle ==========
     Sommet S1(-0.5, 0), S2(0.5, 0), S3(0.5, 3), S4(-0.5, 3);
