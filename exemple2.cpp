@@ -16,7 +16,7 @@ int main() {
     
 
     // Premier obstacle (pentagone au milieu, oblige à un contournement)
-    Sommet S1(4, 5), S2(5, 6), S3(6, 5.5), S4(5.5, 4), S5(4.5, 4);
+    Sommet S1(4, 5), S2(5, 6), S3(6, 5.5), S4(6, 4), S5(4.5, 4); // ne fonctionne pas pour s4(5.5,4)
     Obstacle O1({S1, S2, S3, S4, S5});
 
     //Second obstacle
