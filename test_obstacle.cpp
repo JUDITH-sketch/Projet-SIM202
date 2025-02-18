@@ -21,5 +21,10 @@ int main() {
     std::cout << "\nSegment testé : " << A << "\n";
     std::cout << "Intersection avec le premier segment ? " << (A.intersection(S) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE (intersection en (1,0))
 
+    // Test avec segment passant par un sommet de l'obstacle. 
+    Segment B(-1 * e1 + 3 * e2, 3 * e1 -1 * e2);
+    std::cout << "\nSegment testé : " << B << "\n";
+    std::cout << "Intersection avec le premier segment ? " << (A.intersection(B) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
+
     return 0;
 }
