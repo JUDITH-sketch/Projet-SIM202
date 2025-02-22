@@ -1,3 +1,9 @@
+//===============================================================
+//                deux obstacles dont un pentagone
+//         peut servir comme exemple d'alignement de 3 points
+//===============================================================
+
+
 #include <iostream>
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
