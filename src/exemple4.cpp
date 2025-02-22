@@ -1,3 +1,7 @@
+//===============================================================
+//                obstacle haie (non convexe)
+//===============================================================
+
 #include <iostream>
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
