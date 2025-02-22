@@ -1,5 +1,6 @@
 //===============================================================
 //                deux obstacles dont un pentagone
+//                  plusieurs obstacles
 //         peut servir comme exemple d'alignement de 3 points
 //===============================================================
 
