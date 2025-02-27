@@ -1,41 +1,48 @@
 
+# Compilateur de c 
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -g  
+CXXFLAGS = -Wall -std=c++17 -g
 
-
-SRC_CPP = exemple1.cpp
-EXEC = exemple1
-
-# Fichier intermédiaire généré par exemple1.cpp qui est ensuite lu par le programme .py
-INTERMEDIATE_FILE = graph_data.txt 
-# Routine pyton qui sert à afficher le graphe en format obstacle et le chemin optimal 
+# Routine Python
 PYTHON_SCRIPT = trace_parcours_optimal.py
 
-# clean des fichiers qui polluent le git 
-all: clean $(EXEC) run
+# Fichier intermédiaire généré entre le .cpp et le .py
+INTERMEDIATE_FILE = graph_data.txt
 
-# Compilation du fichier executable
-$(EXEC): $(SRC_CPP)
-	$(CXX) $(CXXFLAGS) -o $(EXEC) $(SRC_CPP)
+# Demande du numéro de l'exemple
+all:
+	@read -p "Entre le numéro de l'exemple que tu veux essayer (ex: 1, 2, 3...) : " num; \
+	$(MAKE) run EXEMPLE_NUM=$$num
 
-# Exécution du programme C++ et du script Python
-run: $(EXEC)
-#ici à chaque fois avec echo j'affiche où est le probleme car quand il y en avait au début cela m'a permit de debuger 
-	@echo "Exécution de $(EXEC)..."  
-	ulimit -m unlimited 2>/dev/null || true  # Essai de lever les restrictions mémoire
-	ulimit -v unlimited 2>/dev/null || true
-	./$(EXEC) || { echo "Erreur lors de l'exécution de $(EXEC), vérifiez votre code."; exit 1; } 
+# Compilation du fichier .cpp et de la routine python bcp d'erreurs de mémoire donc j'affiche avec echo où est le soucis pour pouvoir debugger
+run:
+	@if [ -z "$(EXEMPLE_NUM)" ]; then \
+		echo "Erreur: Aucun numéro d'exemple fourni. Utilisez make EXEMPLE_NUM=<num>."; \
+		exit 1; \
+	fi
+	@if [ ! -f exemple$(EXEMPLE_NUM).cpp ]; then \
+		echo "Erreur: Le fichier exemple$(EXEMPLE_NUM).cpp n'existe pas."; \
+		exit 1; \
+	fi
+	@echo "Compilation de exemple$(EXEMPLE_NUM).cpp..."
+	$(CXX) $(CXXFLAGS) -o exemple$(EXEMPLE_NUM) exemple$(EXEMPLE_NUM).cpp
+
+	@echo "Exécution de exemple$(EXEMPLE_NUM)..."
+	./exemple$(EXEMPLE_NUM) || { echo "Erreur lors de l'exécution."; exit 1; }
 
 	@echo "Exécution de $(PYTHON_SCRIPT)..."
-	python3 $(PYTHON_SCRIPT) || { echo "Erreur lors de l'exécution de $(PYTHON_SCRIPT)."; exit 1; }
+	python3 $(PYTHON_SCRIPT) || { echo "Erreur lors de l'exécution de $(PYTHON_SCRIPT)"; exit 1; }
 
-# Nettoyage des fichiers inutiles
+# Nettoyage des fichiers inutiles qui polluent le folder
 clean:
-	rm -f $(EXEC) *.o a.out $(INTERMEDIATE_FILE)
-
-# regarde si il y a  des erreurs liées à l'allocation de mémoire et dit où c'est 
+	rm -f exemple[0-9]*  
+	rm -f *.o a.out $(INTERMEDIATE_FILE)  
+# Vérification que cette fois il n'y a plus aucun problème de mémoire
 check:
-	valgrind --leak-check=full --show-leak-kinds=all ./$(EXEC)
+	@if [ -z "$(EXEMPLE_NUM)" ]; then \
+		echo "Erreur: Aucun numéro d'exemple fourni. Utilisez make check EXEMPLE_NUM=<num>."; \
+		exit 1; \
+	fi
+	valgrind --leak-check=full --show-leak-kinds=all ./exemple$(EXEMPLE_NUM)
 
-.PHONY: all run clean check
 
