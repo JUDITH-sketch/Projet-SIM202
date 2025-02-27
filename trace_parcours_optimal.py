@@ -1,5 +1,5 @@
 import matplotlib
-#matplotlib.use('Agg') 
+#matplotlib.use('Agg') ajouter pour Judith parce que j'arrive pas à les afficher sur vs code
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
@@ -87,7 +87,7 @@ def tracer_graphe(fichier):
     plt.title("Visualisation du Graphe avec Chemin Optimal")
     plt.grid(True)
     plt.show()
-    #plt.savefig("output.png")
+    #plt.savefig("output.png") ajouter pour Judith parce que j'arrive pas à les afficher sur VS code 
 
 
 # Exécution de la fonction pour afficher le graphe
