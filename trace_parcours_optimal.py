@@ -1,3 +1,5 @@
+import matplotlib
+#matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
@@ -85,6 +87,8 @@ def tracer_graphe(fichier):
     plt.title("Visualisation du Graphe avec Chemin Optimal")
     plt.grid(True)
     plt.show()
+    #plt.savefig("output.png")
+
 
 # Exécution de la fonction pour afficher le graphe
 tracer_graphe("graph_data.txt")
