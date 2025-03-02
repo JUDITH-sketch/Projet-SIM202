@@ -33,15 +33,10 @@ public:
 bool intersection(const Segment& s) const {
     for (size_t i = 0; i < sommets.size(); i++) {
         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
-        
-        // Allow obstacle's own edges but block true intersections
         if (s == edge) {
-            // cout << " ✅ Segment " << s << " is an OBSTACLE EDGE and is ALLOWED" << endl;
-            continue;  // Skip if the segment is an actual edge of the obstacle
+            continue; 
         }
-
         if (edge.intersection(s)) {
-            // cout << " ❌ Segment " << s << " STRICTLY INTERSECTS obstacle edge " << edge << endl;
             return true;
         }
     }
@@ -55,9 +50,8 @@ bool intersection(const Segment& s) const {
     for (size_t i = 0; i < sommets.size(); i++) {
         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
         
-        // Allow obstacle's own edges but block true intersections
         if (s == edge) {
-            isPartOfObstacle = true;  // Skip if the segment is an actual edge of the obstacle
+            isPartOfObstacle = true; 
         }
 
         if (edge.intersection(s)) {
