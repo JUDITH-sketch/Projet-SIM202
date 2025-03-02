@@ -94,6 +94,37 @@ public:
         if(t1 && t2){return true;}
         return false;
     }
+/*
+    bool intersection(const Segment& S) const {
+        // Vérifier si les segments sont exactement les mêmes
+        if ((A == S.A && B == S.B) || (A == S.B && B == S.A)) {
+            return false;
+        }
+        
+        // Vérifier si un sommet coïncide
+        if (A == S.A || A == S.B || B == S.A || B == S.B) {
+            return false;
+        }
+        
+        double a = B.x - A.x, b = S.A.x - S.B.x;
+        double c = B.y - A.y, d = S.A.y - S.B.y;
+        double det = a * d - b * c;
+    
+        if (det == 0) return false; // Segments parallèles ou colinéaires
+    
+        double k1 = S.A.x - A.x;
+        double k2 = S.A.y - A.y;
+    
+        double t = (k1 * d - k2 * b) / det;
+        double u = (k2 * a - k1 * c) / det;
+        
+        // Vérification avec égalité non stricte (inclut les extrémités)
+        bool t1 = (0 <= t && t <= 1);
+        bool t2 = (0 <= u && u <= 1);
+        
+        return t1 && t2;
+    }
+    */
 
     // Affichage
     friend std::ostream& operator<<(std::ostream& os, const Segment& S) {

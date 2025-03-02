@@ -29,7 +29,7 @@ public:
             normales.push_back(seg.normale());
         }
     }
-    
+
 bool intersection(const Segment& s) const {
     for (size_t i = 0; i < sommets.size(); i++) {
         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
@@ -42,6 +42,7 @@ bool intersection(const Segment& s) const {
     }
     return false;
 }
+    
 /*
 // tester pour des intersections fermée.
 bool intersection(const Segment& s) const {
@@ -59,8 +60,8 @@ bool intersection(const Segment& s) const {
         }
     }
     return isPartOfObstacle ? false : hasIntersection;
-}*/
-
+}
+*/
 
 };
 #endif // OBSTACLE_HPP
