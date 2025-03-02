@@ -95,9 +95,20 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         bool inter_SA = false;
 
         for (auto& gobs : list_gobs) {
-            if (gobs.first.intersection(DS)) inter_DS = true;cout<<" ";
-            if (gobs.first.intersection(SA)) inter_SA = true;cout<<" "; // rajouter des cout !!
+            if (gobs.first.intersection(DS)) {
+                inter_DS = true;
+                cout << " ";
+            }
+            if (gobs.first.intersection(SA)) {
+                inter_SA = true;
+                cout << " "; // rajouter des cout !!
+            }
         }
+
+    // for (auto& gobs : list_gobs) {
+    //   if (gobs.first.intersection(DS)) inter_DS = true;cout<<" ";
+    //   if (gobs.first.intersection(SA)) inter_SA = true;cout<<" "; // rajouter des cout !!
+    //   }
 
         Arc DS_arc(list_indice[i], list_indice[0], DS.longueur());
         Arc SA_arc(list_indice[i], list_indice[nb_sommet - 1], SA.longueur());
