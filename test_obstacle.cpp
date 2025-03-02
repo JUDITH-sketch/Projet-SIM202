@@ -17,14 +17,23 @@ int main() {
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(S) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
 
     // Test avec un segment aligné sur un bord de l'obstacle
-    Segment A(S1, S1 + 2.0 * e1); // Segment (0,0) -> (2,0)
+    Segment A(S1, S2); // Segment (0,0) -> (0,2)
     std::cout << "\nSegment testé : " << A << "\n";
-    std::cout << "Intersection avec le premier segment ? " << (A.intersection(S) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE (intersection en (1,0))
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(A) ? "TRUE" : "FALSE") << "\n"; // Doit afficher FALSE (propre segment)
 
     // Test avec segment passant par un sommet de l'obstacle. 
     Segment B(-1 * e1 + 3 * e2, 3 * e1 -1 * e2);
     std::cout << "\nSegment testé : " << B << "\n";
-    std::cout << "Intersection avec le premier segment ? " << (A.intersection(B) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(B) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
 
+    // Test d'intersection avec un segment qui ne traverse pas l'obstacle
+    Segment C(3.0 * e1, 4.0 * e1); 
+    std::cout << "\nSegment testé : " << C << "\n";
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(C) ? "TRUE" : "FALSE") << "\n"; // Doit afficher FALSE
+
+    // Test d'intersection avec un segment qui traverse l'obstacle
+    Segment D(S1, S3); 
+    std::cout << "\nSegment testé : " << D << "\n";
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(D) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
     return 0;
 }
