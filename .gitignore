@@ -1,7 +1,8 @@
 # Ignore executable files
-test_dijkstra
-test_graphe
-test
-programme
+exemple1
+exemple2
+exemple3
+exemple4
+exemple5
 *.txt
 *.exe 
