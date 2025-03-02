@@ -25,17 +25,17 @@ run:
 		exit 1; \
 	fi
 	@echo "Compilation de exemple$(EXEMPLE_NUM).cpp..."
-	$(CXX) $(CXXFLAGS) -o exemple$(EXEMPLE_NUM) exemple$(EXEMPLE_NUM).cpp
+	$(CXX) $(CXXFLAGS) -o exemple$(EXEMPLE_NUM).x exemple$(EXEMPLE_NUM).cpp
 
 	@echo "Exécution de exemple$(EXEMPLE_NUM)..."
-	./exemple$(EXEMPLE_NUM) || { echo "Erreur lors de l'exécution."; exit 1; }
+	./exemple$(EXEMPLE_NUM).x || { echo "Erreur lors de l'exécution."; exit 1; }
 
 	@echo "Exécution de $(PYTHON_SCRIPT)..."
 	python3 $(PYTHON_SCRIPT) || { echo "Erreur lors de l'exécution de $(PYTHON_SCRIPT)"; exit 1; }
 
 # Nettoyage des fichiers inutiles qui polluent le folder
 clean:
-	rm -f exemple[0-9]*  
+	rm -f exemple[0-9].x  
 	rm -f *.o a.out $(INTERMEDIATE_FILE)  
 # Vérification que cette fois il n'y a plus aucun problème de mémoire
 check:
