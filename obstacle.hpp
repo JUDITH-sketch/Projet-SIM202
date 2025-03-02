@@ -42,9 +42,9 @@ bool intersection(const Segment& s) const {
     }
     return false;
 }
-
+/*
 // tester pour des intersections fermée.
-/*bool intersection(const Segment& s) const {
+bool intersection(const Segment& s) const {
     bool isPartOfObstacle = false;
     bool hasIntersection = false;
     for (size_t i = 0; i < sommets.size(); i++) {

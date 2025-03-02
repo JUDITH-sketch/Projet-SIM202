@@ -35,5 +35,10 @@ int main() {
     Segment D(S1, S3); 
     std::cout << "\nSegment testé : " << D << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(D) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
+
+    // Test d'intersection avec un segment qui traverse l'obstacle
+    Segment E(S1, -2*e1); 
+    std::cout << "\nSegment testé : " << E << "\n";
+    std::cout << "Intersection avec l'obstacle ? " << (O.intersection(E) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
     return 0;
 }
