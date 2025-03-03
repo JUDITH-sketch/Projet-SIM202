@@ -30,90 +30,98 @@ public:
         }
     }
 
-bool intersection(const Segment& s) const {
-    for (size_t i = 0; i < sommets.size(); i++) {
-        Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
-        if (s == edge) {
-            continue; 
-        }
-        if (edge.intersection(s)) {
-            return true;
-        }
-    }
-    return false;
-}
-    
-/*
-// tester pour des intersections fermée.
-bool intersection(const Segment& s) const {
-    bool isPartOfObstacle = false;
-    bool hasIntersection = false;
-    for (size_t i = 0; i < sommets.size(); i++) {
-        Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
+// bool intersection(const Segment& s) const {
+//     for (size_t i = 0; i < sommets.size(); i++) {
+//         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
+//         if (s == edge) {
+//             continue; 
+//         }
+//         if (edge.intersection(s)) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+  
+
+// // tester pour des intersections fermée.
+// bool intersection(const Segment& s) const {
+//     bool isPartOfObstacle = false;
+//     bool hasIntersection = false;
+//     for (size_t i = 0; i < sommets.size(); i++) {
+//         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
         
-        if (s == edge) {
-            isPartOfObstacle = true; 
-        }
+//         if (s == edge) {
+//             isPartOfObstacle = true; 
+//         }
 
-        if (edge.intersection(s)) {
-            hasIntersection = true;
-        }
-    }
-    return isPartOfObstacle ? false : hasIntersection;
-}
-*/
-/*
-    // Détermine si un point est strictement à l'intérieur du polygone (ray-casting)
-    bool point_est_interieur(const Sommet& p) const {
-        int count = 0;
-        int n = sommets.size();
+//         if (edge.intersection(s)) {
+//             hasIntersection = true;
+//         }
+//     }
+//     return isPartOfObstacle ? false : hasIntersection;
+// }
 
-        for (int i = 0; i < n; i++) {
-            Sommet A = sommets[i];
-            Sommet B = sommets[(i + 1) % n];
-
-            // Vérifier si le point est sur une arête
-            if ((B.x - A.x) * (p.y - A.y) == (B.y - A.y) * (p.x - A.x) &&
-                p.x >= min(A.x, B.x) && p.x <= max(A.x, B.x) &&
-                p.y >= min(A.y, B.y) && p.y <= max(A.y, B.y)) {
-                return false; // Considéré comme extérieur
-            }
-
-            // Algorithme de l'angle balayé
-            if ((A.y > p.y) != (B.y > p.y)) {
-                double x_intersect = (B.x - A.x) * (p.y - A.y) / (B.y - A.y) + A.x;
-                if (p.x < x_intersect) count++;
-            }
-        }
-        return (count % 2) == 1;  // Retourne vrai si le point est strictement à l'intérieur
-    }
-
-    // Vérifie si un segment traverse strictement l'obstacle
-    bool segmentTraverseStrictement(const Segment& s) const {
-        bool p1Inside = point_est_interieur(s.A);
-        bool p2Inside = point_est_interieur(s.B);
-
-        // Si une extrémité est strictement à l'intérieur, il y a pénétration
-        if (p1Inside || p2Inside) {
-            return true;
-        }
-
-        // Vérifier si une partie du segment passe strictement à l'intérieur
+    // Vérifie si un point est exactement sur une arête du polygone
+    bool isOnBoundary(const Sommet& P) const {
         int n = sommets.size();
         for (int i = 0; i < n; i++) {
             Sommet A = sommets[i];
             Sommet B = sommets[(i + 1) % n];
 
-            // Vérifier si le segment traverse une arête du polygone
-            double cross1 = (B.x - A.x) * (s.A.y - A.y) - (B.y - A.y) * (s.A.x - A.x);
-            double cross2 = (B.x - A.x) * (s.B.y - A.y) - (B.y - A.y) * (s.B.x - A.x);
-
-            if ((cross1 > 0 && cross2 < 0) || (cross1 < 0 && cross2 > 0)) {
-                return true; // Traversée stricte du polygone
+            // Vérifier si P est sur le segment [A, B] en utilisant le produit vectoriel
+            double crossProduct = (P.x - A.x) * (B.y - A.y) - (P.y - A.y) * (B.x - A.x);
+            if (abs(crossProduct) < 1e-9) { // Si le produit est proche de zéro, P est colinéaire
+                // Vérifier que P est bien entre A et B
+                if (P.x >= min(A.x, B.x) && P.x <= max(A.x, B.x) &&
+                    P.y >= min(A.y, B.y) && P.y <= max(A.y, B.y)) {
+                    return true; // Le point est sur une arête
+                }
             }
         }
         return false;
     }
-        */
+
+    // Vérifie si un point est strictement à l'intérieur du polygone (Ray-Casting)
+    bool isPointInside(const Sommet& P) const {
+        if (isOnBoundary(P)) {
+            return false; // Si le point est sur une arête, il n'est pas strictement à l'intérieur
+        }
+
+        int count = 0;
+        int n = sommets.size();
+        //double rayX = 1e9; // Un grand X pour aller loin à droite
+
+        for (int i = 0; i < n; i++) {
+            Sommet A = sommets[i];
+            Sommet B = sommets[(i + 1) % n];
+
+            // Vérifier si P est entre les y des deux sommets
+            if ((P.y > min(A.y, B.y)) && (P.y <= max(A.y, B.y)) && (P.x < max(A.x, B.x))) {
+                // Calculer l'intersection avec la demi-droite horizontale
+                double xIntersect = A.x + (P.y - A.y) * (B.x - A.x) / (B.y - A.y);
+
+                if (xIntersect > P.x) {
+                    count++;
+                }
+            }
+        }
+
+        return (count % 2 == 1); // Impair = intérieur, Pair = extérieur
+    }
+
+    // Vérifie si un segment a au moins un point strictement à l'intérieur
+    bool intersection(const Segment& seg, int samplePoints = 10) const {
+        for (int i = 1; i <= samplePoints; i++) {
+            double t = (double)i / (samplePoints + 1);
+            Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
+                    seg.A.y + t * (seg.B.y - seg.A.y));
+
+            if (isPointInside(P)) {
+                return true; // Si un seul point est dedans, intersection confirmée
+            }
+        }
+        return false;
+    } 
 };
 #endif // OBSTACLE_HPP
