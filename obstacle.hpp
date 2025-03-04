@@ -111,7 +111,7 @@ public:
     }
 
     // Vérifie si un segment a au moins un point strictement à l'intérieur
-    bool intersection(const Segment& seg, int samplePoints = 10) const {
+    bool intersection(const Segment& seg, int samplePoints = 100) const {
         for (int i = 1; i <= samplePoints; i++) {
             double t = (double)i / (samplePoints + 1);
             Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
