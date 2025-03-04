@@ -1,7 +1,7 @@
 
 # Compilateur de c 
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -g
+CXXFLAGS = -Wall -std=c++17 -g -fsanitize = address
 
 # Routine Python
 PYTHON_SCRIPT = trace_parcours_optimal.py
