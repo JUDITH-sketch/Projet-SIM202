@@ -14,7 +14,7 @@ using namespace std;
 
 int main() {
     // ========== Initialisation des Sommets ==========
-    Sommet A(2, 4);
+    Sommet A(-204, 210);
     Sommet B(6, 0);
 
     // ========== Définition de l'Obstacle ==========
