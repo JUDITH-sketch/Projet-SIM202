@@ -10,6 +10,7 @@
 #include <algorithm> // Pour sort
 #include <cmath>    // Pour atan2
 #include <random>   // Pour distribution normale
+#include <fstream>  // Pour ofstream
 
 using namespace std;
 
@@ -120,7 +121,7 @@ bool polygones_se_chevauchent(const vector<Sommet>& poly1, const vector<Sommet>&
         }
     }
     
-    // Vérifier si un polygone est à l'intérieur de l'autre
+    // Vérifier si un point de poly1 est dans poly2 ou vice versa
     auto point_dans_polygone = [](const Sommet& point, const vector<Sommet>& poly) {
         bool dedans = false;
         for (size_t i = 0, j = poly.size() - 1; i < poly.size(); j = i++) {
@@ -150,18 +151,34 @@ bool polygones_se_chevauchent(const vector<Sommet>& poly1, const vector<Sommet>&
     return false;
 }
 
+// Fonction pour calculer la distance minimale entre deux polygones
+double distance_minimale_polygones(const vector<Sommet>& poly1, const vector<Sommet>& poly2) {
+    double min_dist = std::numeric_limits<double>::max();
+    
+    for (const auto& p1 : poly1) {
+        for (const auto& p2 : poly2) {
+            double dx = p1.x - p2.x;
+            double dy = p1.y - p2.y;
+            double dist_squared = dx * dx + dy * dy;
+            min_dist = min(min_dist, sqrt(dist_squared));
+        }
+    }
+    
+    return min_dist;
+}
+
 int main() {
     // Initialisation du générateur de nombres aléatoires
     srand(time(0));
     
     // ========== Définition des Sommets de Départ et d'Arrivée ==========
-    Sommet A(0, 0);  // Point de départ
-    Sommet B(100, 100);  // Point d'arrivée
+    Sommet A(10, 10);  // Point de départ
+    Sommet B(90, 90);  // Point d'arrivée
     
     // ========== Définition des Obstacles (Non Chevauchants) ==========
     
     // Nombre d'obstacles à générer
-    int nb_obstacles = 5;
+    int nb_obstacles = 10; // Essayer de générer plus d'obstacles
     
     // Paramètres de l'espace
     double largeur_espace = 100;
@@ -173,14 +190,21 @@ int main() {
     double irregularite = 0.4; // Entre 0 et 1
     double pointes = 0.2; // Entre 0 et 1
     
+    // Distance minimale entre les obstacles
+    double distance_min_entre_obstacles = 5.0;
+    
     // Vecteur pour stocker les obstacles
     vector<Obstacle> obstacles;
     vector<vector<Sommet>> polygones;
     
     // Générer nb_obstacles obstacles sans chevauchement
-    int max_tentatives = 100;  // Nombre maximal d'essais pour placer un obstacle
+    int max_tentatives = 200;  // Augmenter le nombre d'essais
+    int obstacles_generes = 0;
     
-    for (int i = 0; i < nb_obstacles; i++) {
+    // Zones d'exclusion autour des points A et B (pour éviter d'y placer des obstacles)
+    double zone_exclusion_rayon = 10.0;
+    
+    for (int i = 0; i < nb_obstacles && obstacles_generes < nb_obstacles; i++) {
         bool valide = false;
         int tentatives = 0;
         vector<Sommet> nouveau_polygone;
@@ -189,20 +213,29 @@ int main() {
             tentatives++;
             
             // Générer un nouveau polygone aléatoire
-            double centre_x = ((double)rand() / RAND_MAX) * largeur_espace;
-            double centre_y = ((double)rand() / RAND_MAX) * hauteur_espace;
+            double centre_x = rayon_moyen_max + ((double)rand() / RAND_MAX) * (largeur_espace - 2 * rayon_moyen_max);
+            double centre_y = rayon_moyen_max + ((double)rand() / RAND_MAX) * (hauteur_espace - 2 * rayon_moyen_max);
             double rayon_moyen = rayon_moyen_min + ((double)rand() / RAND_MAX) * (rayon_moyen_max - rayon_moyen_min);
             
-            int min_sommets = 3;
+            // Vérifier si le centre est trop proche de A ou B
+            double dist_A = sqrt(pow(centre_x - A.x, 2) + pow(centre_y - A.y, 2));
+            double dist_B = sqrt(pow(centre_x - B.x, 2) + pow(centre_y - B.y, 2));
+            
+            if (dist_A < zone_exclusion_rayon + rayon_moyen || dist_B < zone_exclusion_rayon + rayon_moyen) {
+                continue; // Trop proche de A ou B, essayer un autre emplacement
+            }
+            
+            int min_sommets = 5;
             int max_sommets = 15;  // Moins de sommets pour garder les obstacles simples
             int nombre_sommets = min_sommets + rand() % (max_sommets - min_sommets + 1);
             
             nouveau_polygone = generer_polygone(centre_x, centre_y, rayon_moyen, irregularite, pointes, nombre_sommets);
             
-            // Vérifier s'il chevauche un obstacle existant
+            // Vérifier s'il chevauche un obstacle existant ou est trop proche
             valide = true;
             for (const auto& poly : polygones) {
-                if (polygones_se_chevauchent(nouveau_polygone, poly)) {
+                if (polygones_se_chevauchent(nouveau_polygone, poly) || 
+                    distance_minimale_polygones(nouveau_polygone, poly) < distance_min_entre_obstacles) {
                     valide = false;
                     break;
                 }
@@ -212,33 +245,22 @@ int main() {
         if (valide) {
             polygones.push_back(nouveau_polygone);
             obstacles.push_back(Obstacle(nouveau_polygone));
-            cout << "Obstacle " << i + 1 << " créé avec " << nouveau_polygone.size() << " sommets" << endl;
+            obstacles_generes++;
+            cout << "Obstacle " << obstacles_generes << " créé avec " << nouveau_polygone.size() << " sommets" << endl;
         } else {
             cout << "Impossible de placer l'obstacle " << i + 1 << " après " << max_tentatives << " tentatives" << endl;
         }
     }
     
-    // Création des Gobstacles
+    cout << "Nombre total d'obstacles générés: " << obstacles_generes << endl;
+    
+    // Création des Gobstacles (si nécessaire)
     vector<Gobstacle> gobstacles;
     for (size_t i = 0; i < obstacles.size(); i++) {
         gobstacles.push_back(Gobstacle(obstacles[i], i + 1));
     }
     
-
-        // ========== Construction du Graphe ==========
-    cout << "\n===== Construction du Graphe =====\n";
-    
-
-    
-    cout << "Pour intégrer ces obstacles à votre graphe et algorithme de chemin:" << endl;
-    cout << "1. Adaptez votre fonction to_graph_Naive_3 pour accepter un vecteur de Gobstacles" << endl;
-    cout << "2. Modifiez l'appel de Dijkstra selon sa signature dans votre code" << endl;
-    cout << "====== Graphe non construit (à adapter) ======\n\n";
-    
     // ========== Exportation des Obstacles ==========
-   
-    
-    // Exporter les obstacles pour visualisation
     ofstream obstacles_file("obstacles_data.txt");
     if (obstacles_file.is_open()) {
         // Écrire les obstacles
@@ -274,25 +296,31 @@ int main() {
         fprintf(gnuplot, "set grid\n");
         
         // Définir les limites pour voir tous les obstacles
-        fprintf(gnuplot, "set xrange [0:%f]\n", largeur_espace * 1.1);
-        fprintf(gnuplot, "set yrange [0:%f]\n", hauteur_espace * 1.1);
+        fprintf(gnuplot, "set xrange [0:%f]\n", largeur_espace);
+        fprintf(gnuplot, "set yrange [0:%f]\n", hauteur_espace);
         
         // Tracer les obstacles en couleurs différentes
-        for (size_t i = 0; i < polygones.size(); i++) {
-            if (i == 0) {
-                fprintf(gnuplot, "plot 'obstacles_data.txt' index %zu with filledcurves closed lt rgb '#%06X' title 'Obstacle %zu'", 
-                        i, 0x800000 + i * 0x100000 / polygones.size(), i + 1);
-            } else {
+        if (polygones.empty()) {
+            fprintf(gnuplot, "plot '-' title 'Aucun obstacle généré'\n");
+            fprintf(gnuplot, "e\n");
+        } else {
+            // Premier obstacle
+            fprintf(gnuplot, "plot 'obstacles_data.txt' index 0 with filledcurves closed lt rgb '#%06X' title 'Obstacle 1'", 
+                    0x800000);
+            
+            // Obstacles suivants avec différentes couleurs
+            for (size_t i = 1; i < polygones.size(); i++) {
                 fprintf(gnuplot, ", 'obstacles_data.txt' index %zu with filledcurves closed lt rgb '#%06X' title 'Obstacle %zu'", 
-                        i, 0x800000 + i * 0x100000 / polygones.size(), i + 1);
+                        i, 0x800000 + i * 0x700000 / polygones.size(), i + 1);
             }
+            
+            // Ajouter les points de départ et d'arrivée
+            fprintf(gnuplot, ", 'obstacles_data.txt' index %zu using 1:2:(%f):(%f):(0x00FF00) with circles fill solid title 'Départ'", 
+                    polygones.size(), 2.0, 2.0);
+            fprintf(gnuplot, ", 'obstacles_data.txt' index %zu using 1:2:(%f):(%f):(0xFF0000) with circles fill solid title 'Arrivée' skip 1", 
+                    polygones.size(), 2.0, 2.0);
         }
         
-        // Ajouter les points de départ et d'arrivée
-        fprintf(gnuplot, ", 'obstacles_data.txt' index %zu using 1:2:(%f):(%f):(0x00FF00) with circles fill solid title 'Départ'", 
-                polygones.size(), 2.0, 2.0);
-        fprintf(gnuplot, ", 'obstacles_data.txt' index %zu using 1:2:(%f):(%f):(0xFF0000) with circles fill solid title 'Arrivée' skip 1", 
-                polygones.size(), 2.0, 2.0);
         fprintf(gnuplot, "\n");
         
         pclose(gnuplot);
