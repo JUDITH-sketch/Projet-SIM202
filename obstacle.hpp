@@ -143,8 +143,8 @@ public:
             else {      pred = Segment(sommets[n-1],Sommet_topadd);}
             cout<<pred<<'\n';
 
-            Sommet e1 = succ.direction() *(1/ (succ.longueur()));
-            Sommet e2 = pred.direction()*(1/ (pred.longueur()));
+            Sommet e1 = succ.normale() *(1/ (succ.longueur()));
+            Sommet e2 = pred.normale()*(1/ (pred.longueur()));
 
             cout<<e1<<e2<<'\n';
 
