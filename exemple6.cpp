@@ -228,8 +228,7 @@ int main() {
         // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
     
-    // Note: Toute cette partie doit être adaptée à votre implémentation spécifique
-    // Je vais simplifier cette section pour éviter les erreurs
+
     
     cout << "Pour intégrer ces obstacles à votre graphe et algorithme de chemin:" << endl;
     cout << "1. Adaptez votre fonction to_graph_Naive_3 pour accepter un vecteur de Gobstacles" << endl;
@@ -237,7 +236,7 @@ int main() {
     cout << "====== Graphe non construit (à adapter) ======\n\n";
     
     // ========== Exportation des Obstacles ==========
-    // Cette partie fonctionne indépendamment de votre implémentation de graphe
+   
     
     // Exporter les obstacles pour visualisation
     ofstream obstacles_file("obstacles_data.txt");
