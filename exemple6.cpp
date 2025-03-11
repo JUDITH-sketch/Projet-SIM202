@@ -54,7 +54,7 @@ int main() {
     srand(time(0)); // Initialisation du générateur de nombres aléatoires
 
     int min = 3;
-    int max = 49; // Maximum number less than 50
+    int max = 49; 
     int nombre = min + rand() % (max - min + 1);
     
     // Génération d'un polygone convexe
