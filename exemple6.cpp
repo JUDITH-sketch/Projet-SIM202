@@ -1,4 +1,3 @@
-#include <iostream>
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
 #include "generer_graphe.hpp"
@@ -24,7 +23,8 @@ int main() {
     srand(time(0)); // Initialisation du générateur de nombres aléatoires
 
     int min = 3;
-    int nombre = min + rand(); // Génère un nombre aléatoire supérieur ou égal à min
+    int max = 49;
+    int nombre = min + rand() % (max - min+1); // Génère un nombre aléatoire supérieur ou égal à min
 
     std::cout << "Nombre de sommets >= " << min << " : " << nombre << std::endl;
 
