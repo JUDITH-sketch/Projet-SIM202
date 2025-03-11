@@ -31,8 +31,9 @@ int main() {
     // Définition du vecteur de sommets S
     vector<Sommet> S;
     for(int i = 0; i < nombre; i++){
-        S.push_back(Sommet(rand(), rand()));
+        S.push_back(Sommet(int coord_x = min + rand() % (max - min+1), int coord_y = min + rand() % (max - min+1)));
     };
+
 
 
     // Premier obstacle (angle droit, oblige à un contournement)
