@@ -125,7 +125,9 @@ public:
     } 
 
     void Paddington(int Discret_cercle = 8, double Rayon ){
-
+        int n = sommets.size();
+        for(int k =0;k<n;k++){
+        };
     }
 };
 #endif // OBSTACLE_HPP
