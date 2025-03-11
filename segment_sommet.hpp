@@ -134,7 +134,19 @@ public:
 
     bool operator==(const Segment& other) const {
     return (A == other.A && B == other.B) || (A == other.B && B == other.A);
-}
+    };
+    
+    //distance à un point X
+    double distance(const Sommet X){
+        
+        Sommet norm = (*this).normale();
+        double C = -(norm.x *A.x + norm.y * A.y);
+
+        double num= abs(norm.x * X.x + norm.y * X.y +C);
+        double denom = sqrt(norm.x*norm.x + norm.y*norm.y);
+
+        return num/denom;
+    }
 
 };
 

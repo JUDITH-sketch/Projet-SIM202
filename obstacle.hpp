@@ -123,5 +123,9 @@ public:
         }
         return false;
     } 
+
+    void Paddington(int Discret_cercle = 8, double Rayon ){
+
+    }
 };
 #endif // OBSTACLE_HPP
