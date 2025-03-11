@@ -9,82 +9,103 @@
 #include <vector>
 #include <algorithm> // Pour sort
 #include <cmath>    // Pour atan2
+#include <random>   // Pour distribution normale
 
 using namespace std;
 
-// Fonction pour calculer l'angle polaire
-// Adaptation en fonction de la structure de votre classe Sommet
-double angle_polaire(const Sommet& point, const Sommet& centre) {
-    // Supposons que Sommet a des membres publics x et y
-    return atan2(point.y - centre.y, point.x - centre.x);
+// Fonction pour limiter une valeur dans un intervalle
+double clip(double value, double lower, double upper) {
+    return min(upper, max(value, lower));
 }
 
-// Fonction pour générer un polygone convexe
-vector<Sommet> generer_polygone_convexe(int n, double centre_x, double centre_y, double rayon_min, double rayon_max) {
-    vector<Sommet> points;
+// Génère les angles de division d'une circonférence de façon aléatoire
+vector<double> random_angle_steps(int steps, double irregularity) {
     vector<double> angles;
+    double lower = (2 * M_PI / steps) - irregularity;
+    double upper = (2 * M_PI / steps) + irregularity;
+    double cumsum = 0;
     
-    // Générer n points aléatoires autour du centre
-    for (int i = 0; i < n; i++) {
-        double angle = (double)rand() / RAND_MAX * 2 * M_PI;
-        double rayon = rayon_min + (double)rand() / RAND_MAX * (rayon_max - rayon_min);
-        double x = centre_x + rayon * cos(angle);
-        double y = centre_y + rayon * sin(angle);
-        points.push_back(Sommet(x, y));
+    for (int i = 0; i < steps; i++) {
+        double angle = lower + (upper - lower) * ((double)rand() / RAND_MAX);
         angles.push_back(angle);
+        cumsum += angle;
     }
     
-    // Trier les points par angle polaire
-    Sommet centre(centre_x, centre_y);
-    sort(points.begin(), points.end(), [centre](const Sommet& a, const Sommet& b) {
-        return angle_polaire(a, centre) < angle_polaire(b, centre);
-    });
+    // Normaliser les pas pour que le point 0 et le point n+1 soient identiques
+    cumsum /= (2 * M_PI);
+    for (int i = 0; i < steps; i++) {
+        angles[i] /= cumsum;
+    }
+    
+    return angles;
+}
+
+// Fonction pour générer un polygone avec irrégularités contrôlées
+vector<Sommet> generer_polygone(double centre_x, double centre_y, double rayon_moyen, 
+                             double irregularite, double pointes, int nb_sommets) {
+    // Vérification des paramètres
+    irregularite = clip(irregularite, 0.0, 1.0);
+    pointes = clip(pointes, 0.0, 1.0);
+    
+    // Calcul des paramètres dérivés
+    irregularite *= 2 * M_PI / nb_sommets;
+    pointes *= rayon_moyen;
+    
+    // Générer les pas angulaires
+    vector<double> angle_steps = random_angle_steps(nb_sommets, irregularite);
+    
+    // Générer les points
+    vector<Sommet> points;
+    double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+    
+    random_device rd;
+    mt19937 gen(rd());
+    normal_distribution<> dist(rayon_moyen, pointes);
+    
+    for (int i = 0; i < nb_sommets; i++) {
+        double radius = clip(dist(gen), 0.0, 2 * rayon_moyen);
+        double x = centre_x + radius * cos(angle);
+        double y = centre_y + radius * sin(angle);
+        points.push_back(Sommet(x, y));
+        angle += angle_steps[i];
+    }
     
     return points;
 }
 
 int main() {
+    // Initialisation du générateur de nombres aléatoires
+    srand(time(0));
+    
     // ========== Définition des Sommets de Départ et d'Arrivée ==========
-    Sommet A(0, 0);  // Point de départ à droite
-    Sommet B(100, 100);  // Point d'arrivée en haut à gauche
-
+    Sommet A(0, 0);  // Point de départ
+    Sommet B(100, 100);  // Point d'arrivée
+    
     // ========== Définition des Obstacles (Non Chevauchants) ==========
     
+    // Paramètres pour la génération du polygone
+    double centre_x = 50;
+    double centre_y = 50;
+    double rayon_moyen = 30;
+    double irregularite = 0.4; // Entre 0 et 1
+    double pointes = 0.2; // Entre 0 et 1
+    
     // Définition du nombre de sommets
-    srand(time(0)); // Initialisation du générateur de nombres aléatoires
-
     int min = 3;
-    int max = 49; 
+    int max = 49; // Maximum inférieur à 50
     int nombre = min + rand() % (max - min + 1);
     
-    // Génération d'un polygone convexe
-    double centre_x = 50; // Centre du polygone
-    double centre_y = 50;
-    double rayon_min = 10; // Distance minimale du centre
-    double rayon_max = 40; // Distance maximale du centre
-    
-    vector<Sommet> sommets_polygone = generer_polygone_convexe(nombre, centre_x, centre_y, rayon_min, rayon_max);
+    // Générer le polygone
+    vector<Sommet> sommets_polygone = generer_polygone(centre_x, centre_y, rayon_moyen, irregularite, pointes, nombre);
     
     // Création de l'obstacle avec les sommets générés
-    Obstacle obstacle(sommets_polygone);
+    Obstacle O1(sommets_polygone);
     
-    std::cout << "Nombre de sommets >= " << min << " : " << nombre << std::endl;
-
-    // Définition du vecteur de sommets S
-    vector<Sommet> S;
-    for(int i = 0; i < nombre; i++){
-        int coord_x = min + rand() % (max - min+1);
-        int coord_y = min + rand() % (max - min+1);
-        S.push_back(Sommet(coord_x, coord_y));
-    }
-
-    // Premier obstacle (angle droit, oblige à un contournement)
-    Obstacle O1(sommets_polygone); // Utiliser le polygone convexe généré
-
-
-    // Création des Gobstacles
+    std::cout << "Nombre de sommets: " << nombre << std::endl;
+    
+    // Création du Gobstacle
     Gobstacle G1(O1, 1);
-    
+ 
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
