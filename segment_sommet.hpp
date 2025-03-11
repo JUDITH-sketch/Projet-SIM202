@@ -8,7 +8,7 @@ class Sommet {
 public:
     double x, y;
 
-    // Constructeurs
+    // Constructeursgi
     Sommet(double x = 0, double y = 0) : x(x), y(y) {}
 
     // Opérateurs mathématiques
