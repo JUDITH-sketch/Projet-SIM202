@@ -124,9 +124,12 @@ public:
         return false;
     } 
 
-    void Paddington(int Discret_cercle = 8, double Rayon ){
+    void Paddington(int Discret_cercle = 8, double Rayon=1 ){
         int n = sommets.size();
+        vector<Sommet> padding;
         for(int k =0;k<n;k++){
+            Sommet Sommet_topadd = sommets[k];
+
         };
     }
 };
