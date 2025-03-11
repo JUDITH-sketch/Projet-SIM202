@@ -186,8 +186,8 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
     list_indice[n - 1] = n - 1;
     list_ref[n - 1] = -1;
 
-    int ref = 1;        // Référence de l'obstacle
-    int ref_prem = 1;   // Référence du premier sommet de l'obstacle
+    // int ref = 1;        // Référence de l'obstacle
+    // int ref_prem = 1;   // Référence du premier sommet de l'obstacle
 
 
     for (int i = 0; i < nb_sommet ; i++) { // Boucle sur tous les sommets
