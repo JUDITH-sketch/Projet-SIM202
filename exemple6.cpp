@@ -51,7 +51,7 @@ int main() {
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
-    GraphData graphData = to_graph_Naive_2(A, B, {G1});
+    GraphData graphData = to_graph_Naive_3(A, B, {G1});
     cout << "====== Graphe terminé ======\n\n";
 
     // ========== Affichage des Sommets ==========
