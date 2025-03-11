@@ -43,21 +43,7 @@ int main() {
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
     GraphData graphData = to_graph_Naive_3(A, B, {G1, G2, G3});
-
-    Graph g = graphData.G;
     cout << "====== Graphe terminé ======\n\n";
-
-    auto [l, p] = dijkstra(g,0); // Affichage des distances minimales
-    std::cout << "Distances minimales (l) :\n";
-    for (size_t i = 1; i <= g.nombreSommets; i++) {
-        std::cout << "l[" << i << "] = " << l[i] << "\n";
-    }
-   
-    // Affichage des prédécesseurs
-    std::cout << "\nPrédécesseurs (p) :\n";
-    for (size_t i = 1; i <= g.nombreSommets; i++) {
-        std::cout << "p[" << i << "] = " << p[i] << "\n";
-    }
    
     // ========== Affichage des Sommets ==========
     afficher_listes(graphData);
