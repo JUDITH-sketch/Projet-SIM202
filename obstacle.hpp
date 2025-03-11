@@ -124,13 +124,56 @@ public:
         return false;
     } 
 
-    void Paddington(int Discret_cercle = 8, double Rayon=1 ){
+    Obstacle Paddington(int Discret_cercle = 4, double Rayon=1. ) const{
         int n = sommets.size();
         vector<Sommet> padding;
+        double angle = 360./Discret_cercle;
         for(int k =0;k<n;k++){
             Sommet Sommet_topadd = sommets[k];
+            cout<<"Sommet to padd : "<<Sommet_topadd<<'\n';
 
-        };
+            Sommet X;Sommet Y;
+            Segment pred(X,Y); Segment succ(X,Y);
+
+            if(k!=n-1){   succ = Segment(sommets[k+1],Sommet_topadd);}
+            else{       succ  = Segment(sommets[0],Sommet_topadd);}
+            cout<<succ<<'\n';
+
+            if(k!=0){   pred= Segment(sommets[k-1],Sommet_topadd);}
+            else {      pred = Segment(sommets[n-1],Sommet_topadd);}
+            cout<<pred<<'\n';
+
+            Sommet e1 = succ.direction() *(1/ (succ.longueur()));
+            Sommet e2 = pred.direction()*(1/ (pred.longueur()));
+
+            cout<<e1<<e2<<'\n';
+
+            double angle = std::acos((e1.x*e2.x - e1.y*e2.y)/(e1.norme()+e2.norme())); // angle entre e1 et e2
+            angle /= Discret_cercle;
+
+            for(int i=0;i<= Discret_cercle;i++){
+                cout<<'\n'<<"-----------"<<k<<"-"<<i<<"----------"<<'\n';
+
+                Sommet Sommet_test = Sommet_topadd + Rayon*(e1*cos(i*angle) + e2*sin(i*angle));
+                cout<<Sommet_test;
+                if(!isPointInside(Sommet_test)){
+                    cout<<"Point not inside"<<'\n';
+                    double d1 = pred.distance(Sommet_test);
+                    double d2 = succ.distance(Sommet_test);
+                    cout<<"distance to obs = "<<d1<<" et "<<d2;
+                    if(d1>=Rayon && d2 >= Rayon){
+                        cout<<"Point hors range"<<'\n';
+                        padding.push_back(Sommet_test);
+                    }
+                }
+            }
+        }
+        Obstacle Obs_padded(padding);
+        for(auto& somm : padding){
+            cout<<somm<<'\n';
+        }
+
+        return Obs_padded;
     }
 };
 #endif // OBSTACLE_HPP

@@ -138,14 +138,33 @@ public:
     
     //distance à un point X
     double distance(const Sommet X){
-        
-        Sommet norm = (*this).normale();
-        double C = -(norm.x *A.x + norm.y * A.y);
+        cout<<"calcul dist"<<'\n';
 
-        double num= abs(norm.x * X.x + norm.y * X.y +C);
-        double denom = sqrt(norm.x*norm.x + norm.y*norm.y);
+        double denom = std::sqrt((A.y - B.y)*(A.y - B.y) + (A.x - B.x)*(A.x - B.x));
 
-        return num/denom;
+        double r = ((X.x - A.x)*(B.x -A.x) + (X.y -A.y)*(B.y-A.y))/(denom*denom);
+
+        if(0<r && r<1){
+
+        double num= std::abs( (A.y -X.y )*(B.x-A.x) - (A.x-X.x)*(B.y-A.y));
+
+        cout<<r<<'\n';
+        cout<<num<<" / "<<denom<<'\n';
+        if(denom <1e-9){cout<<"error droite null";exit(-1);}
+
+        return num/denom;}
+        else{
+            cout<<r;
+            if(r>=1){
+                cout<<"ext";
+                return (X-B).norme();
+            }
+            if(r<=0){
+                cout<<"int";
+                return (X-A).norme();
+            }
+        }
+        return 0;
     }
 
 };
