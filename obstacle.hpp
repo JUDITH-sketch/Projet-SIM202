@@ -143,8 +143,8 @@ public:
             else {      pred = Segment(sommets[n-1],Sommet_topadd);}
             cout<<pred<<'\n';
 
-            Sommet e1 = succ.direction() *(1/ (succ.longueur()));
-            Sommet e2 = pred.direction()*(1/ (pred.longueur()));
+            Sommet e1 = succ.normale() *(1/ (succ.longueur()));
+            Sommet e2 = -pred.normale()*(1/ (pred.longueur()));
 
             cout<<e1<<e2<<'\n';
 
@@ -154,7 +154,7 @@ public:
             for(int i=0;i<= Discret_cercle;i++){
                 cout<<'\n'<<"-----------"<<k<<"-"<<i<<"----------"<<'\n';
 
-                Sommet Sommet_test = Sommet_topadd + Rayon*(e1*cos(i*angle) + e2*sin(i*angle));
+                Sommet Sommet_test = Sommet_topadd + Rayon*(e1*sin(i*angle) + e2*cos(i*angle));
                 cout<<Sommet_test;
                 if(!isPointInside(Sommet_test)){
                     cout<<"Point not inside"<<'\n';

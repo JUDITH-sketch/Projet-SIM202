@@ -1,33 +1,46 @@
+
 #include <iostream>
-#include "generer_graphe.hpp"
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
+#include "generer_graphe.hpp"
 #include "dijkstra.hpp"
+#include "generer_txt.hpp"
 
 using namespace std;
 
 int main() {
-    // ========== Initialisation des Sommets ==========
-    Sommet A(1, 4);
-    Sommet B(7, 2);
+    // ========== Définition des Sommets de Départ et d'Arrivée ==========
+    Sommet A(-1.71, 1.71);  // Point de départ à droite
+    Sommet B(0.7, 0.9);  // Point d'arrivée en haut à gauche
 
-    // ========== Définition de l'Obstacle ==========
-    Sommet S11(3, 0), S12(6, 0), S13(6, 3), S14(3, 3);
-    Obstacle O1({S11, S12, S13, S14});
+    // ========== Définition des Obstacles (Non Chevauchants) ==========
+    
 
-    Segment test(S11,S12);
+    // Premier obstacle (angle droit, oblige à un contournement)
+    Sommet S1(-1.5, 2), S2(-1, 2), S3(-1, 0.32), S4(0.99, 0.3), S5(0.99, -0.1), S6(-1.51, -0.09);
+    Obstacle O1({S1, S2, S3, S4, S5, S6});
 
-    cout<<test.distance(A);
+    //Second obstacle (losange)
+    Sommet S7(-0.51, 0.81), S8(-0.31, 1.6), S9(0.5, 1.8), S10(0.3, 1);
+    Obstacle O2({S7, S8, S9, S10});
+
+    //Troisème obstacle (pentagone)
+    Sommet S11(-0.2, 1.81), S12(0.2, 2.09), S13(0.05, 2.56), S14(-0.43, 2.56), S15(-0.59, 2.1);
+    Obstacle O3({S11, S12, S13, S14, S15});
 
     
     cout << "\n===== Construction du Padding =====\n";
-    Obstacle obs = O1.Paddington(4,0.5);
+    Obstacle PO1 = O1.Paddington(4,0.5);
+    Obstacle PO2 = O2.Paddington(4,0.5);
+    Obstacle PO3 = O3.Paddington(4,0.5);
     cout << "\n===== Fin du Padding =====\n";
-    Gobstacle G01(obs, 1);
+    Gobstacle G01(PO1, 1);
+    Gobstacle G02(PO2, 2);
+    Gobstacle G03(PO3, 3);
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
-    GraphData graphData = to_graph_Naive_3(A, B, {G01});
+    GraphData graphData = to_graph_Naive_3(A, B, {G01,G02,G03});
     cout << "====== Graphe terminé ======\n\n";
 
     // Extract the graph, nodes, and references
