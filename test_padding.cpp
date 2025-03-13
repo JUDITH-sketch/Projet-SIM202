@@ -3,7 +3,9 @@
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
 #include "dijkstra.hpp"
-
+#include "generer_txt.hpp"
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 int main() {
@@ -21,6 +23,7 @@ int main() {
 
     
     cout << "\n===== Construction du Padding =====\n";
+    O1.inversion();
     Obstacle obs = O1.Paddington(4,0.5);
     cout << "\n===== Fin du Padding =====\n";
     Gobstacle G01(obs, 1);
@@ -64,6 +67,12 @@ int main() {
     for (size_t i = 0; i < G.nombreSommets; i++) {
         cout << "   p[" << i << "] = " << p[i] << "\n";
     }
+
+    // ========== Affichage des trois listes ==========
+    afficher_listes(graphData);
+
+    // ========== Exportation du Graphe ==========
+    exporter_graphe_vers_fichier("graph_data.txt", graphData, A, B);
 
     cout << "\nFin du programme\n";
 

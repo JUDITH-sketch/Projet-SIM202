@@ -27,16 +27,17 @@ int main() {
     //Troisème obstacle (pentagone)
     Sommet S11(-0.2, 1.81), S12(0.2, 2.09), S13(0.05, 2.56), S14(-0.43, 2.56), S15(-0.59, 2.1);
     Obstacle O3({S11, S12, S13, S14, S15});
+    O3.inversion();
 
     
     cout << "\n===== Construction du Padding =====\n";
-    Obstacle PO1 = O1.Paddington(4,0.5);
-    Obstacle PO2 = O2.Paddington(4,0.5);
-    Obstacle PO3 = O3.Paddington(4,0.5);
+    Obstacle PO1 = O1.Paddington(4,0.1);
+    // Obstacle PO2 = O2.Paddington(4,0.5);
+    // Obstacle PO3 = O3.Paddington(4,0.5);
     cout << "\n===== Fin du Padding =====\n";
     Gobstacle G01(PO1, 1);
-    Gobstacle G02(PO2, 2);
-    Gobstacle G03(PO3, 3);
+    Gobstacle G02(O2, 2);
+    Gobstacle G03(O3, 3);
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
@@ -63,7 +64,13 @@ int main() {
     cout << "Début du test...\n";
     
     auto [l, p] = dijkstra(G, 0);
-    
+  
+    // ========== Affichage des trois listes ==========
+    afficher_listes(graphData);
+
+    // ========== Exportation du Graphe ==========
+    exporter_graphe_vers_fichier("graph_data.txt", graphData, A, B);
+  
     cout << "Test terminé !\n\n";
 
     // ========== Affichage des Distances Minimales ==========

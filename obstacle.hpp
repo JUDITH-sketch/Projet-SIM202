@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "segment_sommet.hpp"
+#include <algorithm>
 
 using namespace std;
 
@@ -30,6 +31,11 @@ public:
         }
     }
 
+
+    // inverse l'ordre des sommets
+    void inversion() {
+        std::reverse(sommets.begin(), sommets.end());
+    }
 // bool intersection(const Segment& s) const {
 //     for (size_t i = 0; i < sommets.size(); i++) {
 //         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
@@ -129,6 +135,7 @@ public:
         vector<Sommet> padding;
         double angle = 360./Discret_cercle;
         for(int k =0;k<n;k++){
+            cout<<'\n'<<"================================="<<'\n';
             Sommet Sommet_topadd = sommets[k];
             cout<<"Sommet to padd : "<<Sommet_topadd<<'\n';
 
@@ -143,29 +150,34 @@ public:
             else {      pred = Segment(sommets[n-1],Sommet_topadd);}
             cout<<pred<<'\n';
 
-            Sommet e1 = succ.normale() *(1/ (succ.longueur()));
-            Sommet e2 = -pred.normale()*(1/ (pred.longueur()));
+            Sommet e1 = -succ.normale() *(1/ (succ.longueur()));
+            Sommet e2 = pred.normale()*(1/ (pred.longueur()));
 
             cout<<e1<<e2<<'\n';
 
-            double angle = std::acos((e1.x*e2.x - e1.y*e2.y)/(e1.norme()+e2.norme())); // angle entre e1 et e2
+            double angle = std::acos((e1.x*e2.x - e1.y*e2.y)/2); // angle entre e1 et e2
+            double alpha_base = atan2(e1.y,e1.x) +angle ;
+            
             angle /= Discret_cercle;
 
+            Sommet u1(1,0) , u2(0,1);
             for(int i=0;i<= Discret_cercle;i++){
                 cout<<'\n'<<"-----------"<<k<<"-"<<i<<"----------"<<'\n';
-
-                Sommet Sommet_test = Sommet_topadd + Rayon*(e1*sin(i*angle) + e2*cos(i*angle));
+                cout<<Rayon*(e1*sin(i*angle) + e2*cos(i*angle))<<'\n';
+                Sommet Sommet_test = Sommet_topadd + Rayon*(u2*sin(-i*angle+alpha_base) + u1*cos(-i*angle+alpha_base));
                 cout<<Sommet_test;
-                if(!isPointInside(Sommet_test)){
-                    cout<<"Point not inside"<<'\n';
-                    double d1 = pred.distance(Sommet_test);
-                    double d2 = succ.distance(Sommet_test);
-                    cout<<"distance to obs = "<<d1<<" et "<<d2;
-                    if(d1>=Rayon && d2 >= Rayon){
-                        cout<<"Point hors range"<<'\n';
-                        padding.push_back(Sommet_test);
-                    }
-                }
+                
+                padding.push_back(Sommet_test);
+                // if(!isPointInside(Sommet_test)){
+                //     cout<<"Point not inside"<<'\n';
+                //     double d1 = pred.distance(Sommet_test);
+                //     double d2 = succ.distance(Sommet_test);
+                //     cout<<"distance to obs = "<<d1<<" et "<<d2<<'\n';
+                //     if(d1>=Rayon-1e-9 && d2 >= Rayon-1e-9){
+                //         cout<<"Point hors range"<<'\n';
+                //         padding.push_back(Sommet_test);
+                //     }
+                // }
             }
         }
         Obstacle Obs_padded(padding);
