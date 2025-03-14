@@ -9,6 +9,9 @@
 using namespace std;
 
 int main() {
+
+    
+    Sommet e1(1,0), e2(0,1);
     // ========== Définition des Sommets de Départ et d'Arrivée ==========
     Sommet A(-1.71, 1.71);  // Point de départ à droite
     Sommet B(0.7, 0.9);  // Point d'arrivée en haut à gauche
@@ -27,13 +30,20 @@ int main() {
     //Troisème obstacle (pentagone)
     Sommet S11(-0.2, 1.81), S12(0.2, 2.09), S13(0.05, 2.56), S14(-0.43, 2.56), S15(-0.59, 2.1);
     Obstacle O3({S11, S12, S13, S14, S15});
+
+    O3.slide(0.5*e2);
     O3.inversion();
 
+    A=A*3;
+    B=B*3;
+    O1.grow(3);
+    O2.grow(3);
+    O3.grow(3);
     
     cout << "\n===== Construction du Padding =====\n";
-    Obstacle PO1 = O1.Paddington(4,0.05);
-    Obstacle PO2 = O2.Paddington(4,0.05);
-    Obstacle PO3 = O3.Paddington(4,0.05);
+    Obstacle PO1 = O1.Paddington(3,0.2);
+    Obstacle PO2 = O2.Paddington(3,0.2);
+    Obstacle PO3 = O3.Paddington(3,0.2);
     cout << "\n===== Fin du Padding =====\n";
     Gobstacle G01(PO1, 1);
     Gobstacle G02(PO2, 2);

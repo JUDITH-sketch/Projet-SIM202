@@ -31,6 +31,23 @@ public:
         }
     }
 
+    void slide (Sommet s){
+        std::vector<Sommet> S;
+        for (auto& Som : sommets){
+            S.push_back(Som +s);
+        }
+        sommets = S;
+    }
+
+    void grow (double R){
+        std::vector<Sommet> S;
+        for (auto& Som : sommets){
+            Som = Som*R;
+            S.push_back(Som);
+        }
+        sommets = S;
+    }
+
 
     // inverse l'ordre des sommets
     void inversion() {
