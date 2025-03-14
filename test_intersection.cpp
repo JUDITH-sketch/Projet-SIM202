@@ -21,7 +21,7 @@ int main() {
     std::cout << "\nSegment testé : " << A << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(A) ? "TRUE" : "FALSE") << "\n"; // Doit afficher FALSE (propre segment)
 
-    // Test avec segment passant par un sommet de l'obstacle. 
+    // Test avec segment passant par un sommet de l'obstacle. (diagonale)
     Segment B(-1 * e1 + 3 * e2, 3 * e1 -1 * e2);
     std::cout << "\nSegment testé : " << B << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(B) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
@@ -31,13 +31,13 @@ int main() {
     std::cout << "\nSegment testé : " << C << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(C) ? "TRUE" : "FALSE") << "\n"; // Doit afficher FALSE
 
-    // Test d'intersection avec un segment qui traverse l'obstacle
+    // Test d'intersection avec un segment qui traverse l'obstacle (diagonale)
     Segment D(S1, S3); 
     std::cout << "\nSegment testé : " << D << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(D) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
 
-    // Test d'intersection avec un segment qui traverse l'obstacle
-    Segment E(S1, -2*e1); 
+    // Test d'intersection avec un segment qui entre dans l'obstacle mais qui n'en sort pas
+    Segment E(S1, e1 + e2); 
     std::cout << "\nSegment testé : " << E << "\n";
     std::cout << "Intersection avec l'obstacle ? " << (O.intersection(E) ? "TRUE" : "FALSE") << "\n"; // Doit afficher TRUE
 }
