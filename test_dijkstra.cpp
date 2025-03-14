@@ -23,13 +23,19 @@ int main() {
         {3, 6, 2}, {6, 3, 2}, {4, 5, 6}, {5, 4, 6}, {5, 6, 9}, {6, 5, 9}
     };
 
+    // Nouveau graphe avec un point isolé (sommet 1 se relie uniquement à lui-même)
+    Graph g3 = {
+        {1, 1, 0},  // sommet isolé qui revient sur lui-même avec coût 0
+        {2, 3, 4}, {3, 4, 5}, {4, 5, 6}, {5, 2, 7}
+    };
+
     // Fonction pour exécuter Dijkstra et afficher les résultats
     auto run_dijkstra = [&](const Graph& graph, int start_node, const std::string& title) {
         std::cout << "===============================\n";
         std::cout << "Résultats de Dijkstra pour: " << title << "\n";
         std::cout << "===============================\n";
 
-        int numNodes = graph.nombreSommets;  // Utilisation de la méthode `nombreSommets()`
+        int numNodes = graph.nombreSommets;  // Appel de la méthode correctement
         auto [l, p] = dijkstra(graph, start_node);
 
         std::cout << "Distances minimales (l) :\n";
@@ -45,10 +51,13 @@ int main() {
         std::cout << "\n";
     };
 
-    // Exécution des tests
+    // Exécution des tests existants
     run_dijkstra(g, 1, "Graphe de l'énoncé");
     run_dijkstra(g1, 1, "Graphe test 'obstacle carré'");
     run_dijkstra(g2, 1, "Graphe de la page Wikipedia");
+
+    // Nouveau test : sommet isolé
+    run_dijkstra(g3, 1, "Graphe avec un sommet isolé qui se relie à lui-même");
 
     return 0;
 }
