@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sommet_graph_v1.hpp"
+#include "generer_graphe_naif.hpp"
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
 #include "dijkstra.hpp"
