@@ -133,7 +133,7 @@ public:
         return (count % 2 == 1); // Impair = intérieur, Pair = extérieur
     }
 
-    // Vérifie si un segment a au moins un point strictement à l'intérieur
+    // //Vérifie si un segment a au moins un point strictement à l'intérieur
     // bool intersection(const Segment& seg, int samplePoints = 100) const {
     //     for (int i = 1; i <= samplePoints; i++) {
     //         double t = (double)i / (samplePoints + 1);

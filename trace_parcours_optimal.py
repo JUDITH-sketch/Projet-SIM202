@@ -87,7 +87,8 @@ def tracer_graphe(fichier):
     plt.title("Visualisation du Graphe avec Chemin Optimal")
     plt.grid(True)
     plt.show()
-    #plt.savefig("output.png") ajouter pour Judith parce que j'arrive pas à les afficher sur VS code 
+    #plt.savefig('figure.png', dpi=300, bbox_inches='tight')
+
 
 
 # Exécution de la fonction pour afficher le graphe
