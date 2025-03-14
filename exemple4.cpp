@@ -28,10 +28,10 @@ int main() {
     cout << "====== Graphe terminé ======\n\n";
     dijkstra(graphData.G,0);
     // ========== Affichage des trois listes ==========
-    // afficher_listes(graphData);
+    afficher_listes(graphData);
 
     // ========== Exportation du Graphe ==========
-    // exporter_graphe_vers_fichier("graph_data.txt", graphData, A, B);
+    exporter_graphe_vers_fichier("graph_data.txt", graphData, A, B);
 
     return 0;
 }

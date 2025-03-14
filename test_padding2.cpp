@@ -35,7 +35,7 @@ int main() {
     Obstacle PO2 = O2.Paddington(8,0.3);
 
     // Création des Gobstacles
-    // Gobstacle GP1(PO1, 3);
+    Gobstacle GP1(PO1, 3);
     Gobstacle GP2(PO2, 4);
     Gobstacle G1(O1, 1);
     Gobstacle G2(O2, 2);
@@ -43,7 +43,7 @@ int main() {
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
-    GraphData graphData = to_graph_Naive_3(A, B, {G1, GP2});
+    GraphData graphData = to_graph_Naive_3(A, B, {GP1, GP2});
     cout << "====== Graphe terminé ======\n\n";
 
     // ========== Affichage des Sommets ==========
