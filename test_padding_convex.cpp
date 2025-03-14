@@ -31,13 +31,13 @@ int main() {
 
     
     cout << "\n===== Construction du Padding =====\n";
-    Obstacle PO1 = O1.Paddington(4,0.1);
-    // Obstacle PO2 = O2.Paddington(4,0.5);
-    // Obstacle PO3 = O3.Paddington(4,0.5);
+    Obstacle PO1 = O1.Paddington(4,0.05);
+    Obstacle PO2 = O2.Paddington(4,0.05);
+    Obstacle PO3 = O3.Paddington(4,0.05);
     cout << "\n===== Fin du Padding =====\n";
     Gobstacle G01(PO1, 1);
-    Gobstacle G02(O2, 2);
-    Gobstacle G03(O3, 3);
+    Gobstacle G02(PO2, 2);
+    Gobstacle G03(PO3, 3);
 
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
@@ -60,11 +60,11 @@ int main() {
     // cout << "\n";
 
     // ========== Exécution de Dijkstra ==========
-    cout << "====== Test de Dijkstra ======\n";
-    cout << "Début du test...\n";
+    // cout << "====== Test de Dijkstra ======\n";
+    // cout << "Début du test...\n";
     
-    auto [l, p] = dijkstra(G, 0);
-  
+    // auto [l, p] = dijkstra(G, 0);
+    // cout<<"Dijkstra complete \n";
     // ========== Affichage des trois listes ==========
     afficher_listes(graphData);
 
@@ -73,17 +73,17 @@ int main() {
   
     cout << "Test terminé !\n\n";
 
-    // ========== Affichage des Distances Minimales ==========
-    cout << "Distances minimales (l) :\n";
-    for (size_t i = 0; i < G.nombreSommets; i++) {
-        cout << "   l[" << i << "] = " << l[i] << "\n";
-    }
+    // // ========== Affichage des Distances Minimales ==========
+    // cout << "Distances minimales (l) :\n";
+    // for (size_t i = 0; i < G.nombreSommets; i++) {
+    //     cout << "   l[" << i << "] = " << l[i] << "\n";
+    // }
 
-    // ========== Affichage des Prédécesseurs ==========
-    cout << "\nPrédécesseurs (p) :\n";
-    for (size_t i = 0; i < G.nombreSommets; i++) {
-        cout << "   p[" << i << "] = " << p[i] << "\n";
-    }
+    // // ========== Affichage des Prédécesseurs ==========
+    // cout << "\nPrédécesseurs (p) :\n";
+    // for (size_t i = 0; i < G.nombreSommets; i++) {
+    //     cout << "   p[" << i << "] = " << p[i] << "\n";
+    // }
 
     cout << "\nFin du programme\n";
 
