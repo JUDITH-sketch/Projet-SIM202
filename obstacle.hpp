@@ -117,18 +117,30 @@ public:
     }
 
     // Vérifie si un segment a au moins un point strictement à l'intérieur
-    bool intersection(const Segment& seg, int samplePoints = 100) const {
-        for (int i = 1; i <= samplePoints; i++) {
-            double t = (double)i / (samplePoints + 1);
-            Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
-                    seg.A.y + t * (seg.B.y - seg.A.y));
+    // bool intersection(const Segment& seg, int samplePoints = 100) const {
+    //     for (int i = 1; i <= samplePoints; i++) {
+    //         double t = (double)i / (samplePoints + 1);
+    //         Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
+    //                 seg.A.y + t * (seg.B.y - seg.A.y));
 
-            if (isPointInside(P)) {
-                return true; // Si un seul point est dedans, intersection confirmée
-            }
+    //         if (isPointInside(P)) {
+    //             return true; // Si un seul point est dedans, intersection confirmée
+    //         }
+    //     }
+    //     return false;
+    // } 
+
+    
+    // Vérifie si un segment coupe l'obstacle
+    bool intersection(const Segment& S) const {
+        int n = sommets.size();
+        for (int i = 0; i < n; i++) {
+            Segment seg(sommets[i], sommets[(i + 1) % n]);
+            if (S.intersection(seg)) {return true;}
+            if( isPointInside(S.midpoint())){return true;}
         }
         return false;
-    } 
+    }
 
     Obstacle Paddington(int Discret_cercle = 4, double Rayon=1. ) const{
         int n = sommets.size();
@@ -167,17 +179,17 @@ public:
                     Sommet Sommet_test = Sommet_topadd + Rayon*(u2*sin(-i*angle+alpha_base) + u1*cos(-i*angle+alpha_base));
                     cout<<Sommet_test;
                     
-                    padding.push_back(Sommet_test);
-                    // if(!isPointInside(Sommet_test)){
-                    //     cout<<"Point not inside"<<'\n';
-                    //     double d1 = pred.distance(Sommet_test);
-                    //     double d2 = succ.distance(Sommet_test);
-                    //     cout<<"distance to obs = "<<d1<<" et "<<d2<<'\n';
-                    //     if(d1>=Rayon-1e-9 && d2 >= Rayon-1e-9){
-                    //         cout<<"Point hors range"<<'\n';
-                    //         padding.push_back(Sommet_test);
-                    //     }
-                    // }
+                    // padding.push_back(Sommet_test);
+                    if(!isPointInside(Sommet_test)){
+                        cout<<"Point not inside"<<'\n';
+                        double d1 = pred.distance(Sommet_test);
+                        double d2 = succ.distance(Sommet_test);
+                        cout<<"distance to obs = "<<d1<<" et "<<d2<<'\n';
+                        if(d1>=Rayon-1e-9 && d2 >= Rayon-1e-9){
+                            cout<<"Point hors range"<<'\n';
+                            padding.push_back(Sommet_test);
+                        }
+                    }
                 }
             }
             else{
