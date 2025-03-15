@@ -6,7 +6,7 @@ typedef pair<Obstacle,int> Gobstacle;
 
 //on assume qu'un obstacle ne possède pas plus de 100 points
 
-Graph to_graph_Naive(Node D,Node A, initializer_list<Gobstacle> list_gobs){
+Graph to_graph_Naive(Node D,Node A, initializer_list<Gobstacle> list_gobs, bool padded=false){
     Graph G;
 
     int number_error=0;

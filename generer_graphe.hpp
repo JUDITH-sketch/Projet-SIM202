@@ -18,7 +18,7 @@ struct GraphData {
 };
 
 // On assume qu'un obstacle ne possède pas plus de 100 points
-GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs) {
+GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, int methode=1) {
     Graph G;
 
     // ----------- Initialisation des listes ---------------
@@ -95,20 +95,12 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         bool inter_SA = false;
 
         for (auto& gobs : list_gobs) {
-            if (gobs.first.intersection(DS)) {
-                inter_DS = true;
-                cout << " ";
-            }
-            if (gobs.first.intersection(SA)) {
-                inter_SA = true;
-                cout << " "; // rajouter des cout !!
-            }
+            if(methode ==1){if (gobs.first.intersection_ouvertferme(DS)) {inter_DS = true;cout << " "; }}
+            if(methode ==2){if (gobs.first.intersection_RayTracing(DS)) {inter_DS = true;cout << " "; }}
+            if(methode ==1){if (gobs.first.intersection_ouvertferme(SA)) {inter_SA = true;cout << " ";}} 
+            if(methode ==2){if (gobs.first.intersection_RayTracing(SA)) {inter_SA = true;cout << " ";}} // rajouter des cout !!
+            
         }
-
-    // for (auto& gobs : list_gobs) {
-    //   if (gobs.first.intersection(DS)) inter_DS = true;cout<<" ";
-    //   if (gobs.first.intersection(SA)) inter_SA = true;cout<<" "; // rajouter des cout !!
-    //   }
 
         Arc DS_arc(list_indice[i], list_indice[0], DS.longueur());
         Arc SA_arc(list_indice[i], list_indice[nb_sommet - 1], SA.longueur());
@@ -136,7 +128,8 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
                 bool inter = false; // Innocent jusqu'à preuve du contraire
 
                 for (auto& gobs : list_gobs) {
-                    if (gobs.first.intersection(iter_seg)) inter = true;
+                    if(methode ==1){if (gobs.first.intersection_ouvertferme(iter_seg)) inter = true;}
+                    if(methode ==2){if (gobs.first.intersection_RayTracing(iter_seg)) inter = true;}
                 }
 
                 if (!inter) {
@@ -154,15 +147,29 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 }
 
 
-GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs) {
+GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, bool padded=false, int methode=1) {
     Graph G;
 
     // ----------- Initialisation des listes ---------------
+
+
+    // A l'air de fonctionner si on remplace initializer_list par vector mais l'exemple 3 bug
+    // if(padded){
+    //     int N = list_gobs.size();
+    //     cout<<N;
+    //     for(int k=0;k<N;k++){
+    //         int indice = list_gobs[k].second;
+    //         Gobstacle Pgobs = pair<Obstacle,int>(list_gobs[k].first.Paddington(),indice );
+    //         list_gobs[k] = Pgobs;
+    //     }
+    // }
+
     int n = 2;
     for (auto& obs : list_gobs) {
         n += obs.first.sommets.size();
     }
 
+    
     int nb_sommet = n;  // Nombre total de sommets dans le graphe
     vector<Sommet> list_sommet(n);
     vector<int> list_indice(n);
@@ -178,6 +185,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
         }
     }
 
+
     list_sommet[0] = D;
     list_indice[0] = 0;
     list_ref[0] = 0;
@@ -189,7 +197,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
     // int ref = 1;        // Référence de l'obstacle
     // int ref_prem = 1;   // Référence du premier sommet de l'obstacle
 
-
+    cout<<"\n ====== Construction du graph ============== \n";
     for (int i = 0; i < nb_sommet ; i++) { // Boucle sur tous les sommets
         for (int j =0; j< i; j++ ){
             if(i!=j){ // Pas d'arc (i->j)
@@ -197,7 +205,8 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
                 bool inter = false; // Innocent jusqu'à preuve du contraire
 
                 for (auto& gobs : list_gobs) {
-                    if (gobs.first.intersection(iter_seg)) inter = true;
+                    if(methode ==1){if (gobs.first.intersection_ouvertferme(iter_seg)) inter = true;}
+                    if(methode ==2){if (gobs.first.intersection_RayTracing(iter_seg)) inter = true;}
                 }
 
                 if (!inter) {

@@ -31,6 +31,7 @@ public:
         }
     }
 
+    // fait glisser un obstacle dans le sens du sommet
     void slide (Sommet s){
         std::vector<Sommet> S;
         for (auto& Som : sommets){
@@ -39,6 +40,7 @@ public:
         sommets = S;
     }
 
+    // fait grossir un obstacle par un scalaire
     void grow (double R){
         std::vector<Sommet> S;
         for (auto& Som : sommets){
@@ -53,6 +55,7 @@ public:
     void inversion() {
         std::reverse(sommets.begin(), sommets.end());
     }
+
 // bool intersection(const Segment& s) const {
 //     for (size_t i = 0; i < sommets.size(); i++) {
 //         Segment edge(sommets[i], sommets[(i + 1) % sommets.size()]);
@@ -134,22 +137,22 @@ public:
     }
 
     // //Vérifie si un segment a au moins un point strictement à l'intérieur
-    // bool intersection(const Segment& seg, int samplePoints = 100) const {
-    //     for (int i = 1; i <= samplePoints; i++) {
-    //         double t = (double)i / (samplePoints + 1);
-    //         Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
-    //                 seg.A.y + t * (seg.B.y - seg.A.y));
+    bool intersection_RayTracing(const Segment& seg, int samplePoints = 100) const {
+        for (int i = 1; i <= samplePoints; i++) {
+            double t = (double)i / (samplePoints + 1);
+            Sommet P(seg.A.x + t * (seg.B.x - seg.A.x),
+                    seg.A.y + t * (seg.B.y - seg.A.y));
 
-    //         if (isPointInside(P)) {
-    //             return true; // Si un seul point est dedans, intersection confirmée
-    //         }
-    //     }
-    //     return false;
-    // } 
+            if (isPointInside(P)) {
+                return true; // Si un seul point est dedans, intersection confirmée
+            }
+        }
+        return false;
+    } 
 
     
     // Vérifie si un segment coupe l'obstacle
-    bool intersection(const Segment& S) const {
+    bool intersection_ouvertferme(const Segment& S) const {
         int n = sommets.size();
         for (int i = 0; i < n; i++) {
             Segment seg(sommets[i], sommets[(i + 1) % n]);
@@ -159,7 +162,8 @@ public:
         return false;
     }
 
-    Obstacle Paddington(int Discret_cercle = 4, double Rayon=1. ) const{
+    // Padd un obstacle
+    Obstacle Paddington(int Discret_cercle = 4, double Rayon=0.1 ) const{
         int n = sommets.size();
         vector<Sommet> padding;
         double angle = 360./Discret_cercle;
