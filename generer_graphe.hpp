@@ -18,8 +18,10 @@ struct GraphData {
 };
 
 // On assume qu'un obstacle ne possède pas plus de 100 points
-GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, int methode=1) {
+GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs,bool padding, int methode=1) {
     Graph G;
+
+    if(methode != 1 && methode !=2){cout<<"methode non attribué"; methode =1;}
 
     // ----------- Initialisation des listes ---------------
     int n = 2;
@@ -63,7 +65,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
             G.add(iter_arc);
             G.add(inverse(iter_arc));
 
-            cout << iter_arc << " bruh \n";
+            cout << iter_arc << " \n";
         } 
         else {
             if (ref_prem != nb_sommet - 1) { // N'envoie pas le dernier sommet sur lui-même
@@ -137,7 +139,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
                     cout << iter_seg << '\n';
                     G.add(iter_arc);
                     G.add(inverse(iter_arc));
-                    cout << iter_arc << " " << i << "," << j << " bloub \n";
+                    cout << iter_arc << " " << i << "," << j << " \n";
                 }
             }
         }
@@ -149,6 +151,8 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 
 GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, bool padded=false, int methode=1) {
     Graph G;
+    
+    if(methode != 1 && methode !=2){cout<<"\n methode non attribuée \n selection de la methode par default \n"; methode =1;}
 
     // ----------- Initialisation des listes ---------------
 
@@ -197,7 +201,6 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
     // int ref = 1;        // Référence de l'obstacle
     // int ref_prem = 1;   // Référence du premier sommet de l'obstacle
 
-    cout<<"\n ====== Construction du graph ============== \n";
     for (int i = 0; i < nb_sommet ; i++) { // Boucle sur tous les sommets
         for (int j =0; j< i; j++ ){
             if(i!=j){ // Pas d'arc (i->j)
@@ -214,7 +217,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
                     cout << iter_seg << '\n';
                     G.add(iter_arc);
                     G.add(inverse(iter_arc));
-                    cout << iter_arc << " " << i << "," << j << " bloub \n";
+                    cout << iter_arc << " " << i << "," << j << " \n";
                 }
             }
         }
