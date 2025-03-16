@@ -163,31 +163,36 @@ public:
     }
 
 // Méthode en uttilisant le principe des normales 
-    bool intersection_normale_ouverte(const Segment& s) const {
-        for (size_t i = 0; i < sommets.size(); i++) {
-            Sommet A = sommets[i];
-            Sommet B = sommets[(i + 1) % sommets.size()]; // Arête suivante (fermeture du polygone)
-    
-            // Vecteur de l'arête
-            double dx = B.x - A.x;
-            double dy = B.y - A.y;
-    
-            // Normale perpendiculaire (rotation de 90°)
-            double nx = -dy;
-            double ny = dx;
-    
-            // Projection scalaire des extrémités du segment sur la normale
-            double proj1 = (s.A.x - A.x) * nx + (s.A.y - A.y) * ny;
-            double proj2 = (s.B.x - A.x) * nx + (s.B.y - A.y) * ny;
-    
-            // Si les projections sont de chaque côté de la normale, il y a intersection
-            if (proj1 * proj2 < 0) {
-                return true;
-            }
+   bool Obstacle::intersection_normale_ouverte(const Segment& s) const {
+    for (size_t i = 0; i < sommets.size(); i++) {
+        Sommet A = sommets[i];
+        Sommet B = sommets[(i + 1) % sommets.size()]; // Arête suivante (fermeture du polygone)
+        
+        Segment arrete(A, B);
+
+        // Vérifier si le segment s croise l'arête actuelle de l'obstacle
+        if (arrete.intersection(s)) {
+            return true; // Intersection trouvée
         }
-        return false;
+
+        // Calculer la normale perpendiculaire à l'arête
+        double dx = B.x - A.x;
+        double dy = B.y - A.y;
+        double nx = -dy;
+        double ny = dx;
+
+        // Vérifier si les deux points du segment test sont de part et d'autre de la normale
+        double proj1 = (s.A.x - A.x) * nx + (s.A.y - A.y) * ny;
+        double proj2 = (s.B.x - A.x) * nx + (s.B.y - A.y) * ny;
+
+        if (proj1 * proj2 < 0) { // Si les projections sont opposées, le segment traverse l'obstacle
+            return true;
+        }
     }
     
+    return false;
+}
+
     // Ces fonctions vont être utiles pour vérifier si deux obstacles se chevauchent pour l'exemple interactif (7)
     bool contient_point(const Sommet& s) const {
         int count = 0;
