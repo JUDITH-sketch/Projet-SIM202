@@ -9,8 +9,7 @@
 #include "obstacle.hpp"
 #include "generer_graphe.hpp"
 #include "dijkstra.hpp"
-#include "generer_txt.hpp"  // Assure-toi d'avoir un fichier d'en-tête pour cette fonction
-
+#include "generer_txt.hpp"  
 using namespace std;
 
 int main() {

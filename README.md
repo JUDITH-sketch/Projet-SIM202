@@ -23,7 +23,7 @@ I° Les fichiers .hpp
 
 // segment_sommet.hpp 
 
-Ce fichier contient la définition des classes Sommet et Segment et de leurs différentes fonctions élémentaires. Pour la classe segment elle contient notamment la fonction intersection verifiant si deux segments sont en intersection et la fonction distance à un point utile ensuite pour créer le graphe. 
+Ce fichier contient la définition des classes Sommet et Segment et de leurs différentes fonctions élémentaires : opérateurs simples, norme, test d'égalité, direction du segment,normale, milieu. Pour la classe segment elle contient notamment la fonction intersection verifiant si deux segments sont en intersection et la fonction distance à un point utile ensuite pour créer le graphe. 
 
 // obstacle.hpp 
 
