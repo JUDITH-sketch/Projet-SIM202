@@ -1,4 +1,3 @@
-
 # Compilateur de c 
 CXX = g++
 CXXFLAGS = -Wall -std=c++17 -g -fsanitize=address
@@ -30,6 +29,11 @@ run:
 	@echo "Exécution de exemple$(EXEMPLE_NUM)..."
 	./exemple$(EXEMPLE_NUM).x || { echo "Erreur lors de l'exécution."; exit 1; }
 
+	@if [ ! -s $(INTERMEDIATE_FILE) ]; then \
+		echo "Erreur: Le fichier $(INTERMEDIATE_FILE) est vide ou absent. Annulation de l'exécution de Python."; \
+		exit 1; \
+	fi
+
 	@echo "Exécution de $(PYTHON_SCRIPT)..."
 	python3 $(PYTHON_SCRIPT) || { echo "Erreur lors de l'exécution de $(PYTHON_SCRIPT)"; exit 1; }
 
@@ -37,6 +41,7 @@ run:
 clean:
 	rm -f exemple[0-9].x  
 	rm -f *.o a.out $(INTERMEDIATE_FILE)  
+
 # Vérification que cette fois il n'y a plus aucun problème de mémoire
 check:
 	@if [ -z "$(EXEMPLE_NUM)" ]; then \
@@ -44,5 +49,3 @@ check:
 		exit 1; \
 	fi
 	valgrind --leak-check=full --show-leak-kinds=all ./exemple$(EXEMPLE_NUM)
-
-

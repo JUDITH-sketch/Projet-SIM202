@@ -210,6 +210,9 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
                 for (auto& gobs : list_gobs) {
                     if(methode ==1){if (gobs.first.intersection_ouvertferme(iter_seg)) inter = true;}
                     if(methode ==2){if (gobs.first.intersection_RayTracing(iter_seg)) inter = true;}
+                    if (methode == 3) { 
+                        if (gobs.first.intersection_normale_ouverte(iter_seg)) inter = true;
+                    }
                 }
 
                 if (!inter) {
@@ -225,7 +228,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
     
     return {G, list_sommet, list_indice, list_ref};
 }
-GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const vector<pair<Obstacle, int>>& list_gobs, bool padded=false, int methode=1) {
+GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const vector<pair<Obstacle, int>>& list_gobs, bool padded=false, int methode=3) {
     Graph G;
     
     if(methode != 1 && methode !=2){

@@ -14,7 +14,7 @@ int main() {
     cout << "Entrez les coordonnées du point de départ (x y) : ";
     while (!(cin >> xA >> yA)) {
         cout << "Entrée invalide ! Veuillez entrer deux nombres séparés par un espace : ";
-        cin.clear(); // Réinitialise cin
+        cin.clear(); // Réinitialise cin dans le cas où ce qui est entré ça va pas parce que sinon j'avais des problèmes de boucles infinie
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore le reste de la ligne
     }
 
@@ -63,6 +63,16 @@ int main() {
         
         Obstacle O(sommets);
         obstacles.push_back(make_pair(O, i+1));
+    }
+    // Vérification des chevauchements
+    vector<Obstacle> liste_obstacles;
+    for (const auto& p : obstacles) {
+        liste_obstacles.push_back(p.first);
+    }
+
+    if (obstacles_se_chevauchent(obstacles)) {
+        cout << "Les obstacles se chevauchent, arrêt du programme." << endl;
+         exit(1);
     }
     
     // ========== Construction du Graphe ==========
