@@ -220,6 +220,7 @@ public:
         // Si le nombre d'intersections est impair, le point est à l'intérieur
         return count % 2 == 1;
     }
+
     // Vérifie si deux obstacles se chevauchent
     bool obstacles_se_chevauchent(const vector<pair<Obstacle, int>>& obstacles) {
     // Parcours de tous les couples d'obstacles possibles
@@ -256,7 +257,7 @@ public:
         }
     }
     return false; // Aucun chevauchement détecté
-}
+    }
 
     
 

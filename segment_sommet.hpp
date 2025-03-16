@@ -120,7 +120,7 @@ public:
         double t = (k1 * d - k2 * b) / det;
         double u = (k2 * a - k1 * c) / det;
         
-        // Vérification avec égalité non stricte (inclut les extrémités)
+        // Vérification avec égalité non stricte et stricte(segment ouvert contre segment fermé)
         bool t1 = (0 < t && t < 1);
         bool t2 = (0 <= u && u <= 1);
         
