@@ -86,8 +86,8 @@ def tracer_graphe(fichier):
     plt.ylabel("Y")
     plt.title("Visualisation du Graphe avec Chemin Optimal")
     plt.grid(True)
-    plt.show()
-    #plt.savefig('figure.png', dpi=300, bbox_inches='tight')
+    #plt.show()
+    plt.savefig('figure.png', dpi=300, bbox_inches='tight')
 
 
 
