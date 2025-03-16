@@ -187,6 +187,15 @@ public:
         }
         return false;
     }
+
+    bool intersection (const Segment& s, int methode) const {
+        bool T;
+        if (methode =1){ T = intersection_ouvertferme(s);}
+        if (methode =2){ T = intersection_RayTracing(s);}
+        if (methode =3){ T = intersection_normale_ouverte(s);}
+        if (methode =0 || methode >3) {cout<<"methode non defini";}
+        return T;
+    }
     
     // Ces fonctions vont être utiles pour vérifier si deux obstacles se chevauchent pour l'exemple interactif (7)
     bool contient_point(const Sommet& s) const {
