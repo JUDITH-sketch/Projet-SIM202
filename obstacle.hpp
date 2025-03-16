@@ -298,7 +298,6 @@ public:
 
                 for(int i=0;i<= Discret_cercle;i++){
                     cout<<'\n'<<"-----------"<<k<<"-"<<i<<"----------"<<'\n';
-                    cout<<Rayon*(e1*sin(i*angle) + e2*cos(i*angle))<<'\n';
                     Sommet Sommet_test = Sommet_topadd + Rayon*(u2*sin(-i*angle+alpha_base) + u1*cos(-i*angle+alpha_base));
                     cout<<Sommet_test;
                     
