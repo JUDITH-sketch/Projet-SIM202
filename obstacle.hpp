@@ -163,7 +163,7 @@ public:
     }
 
 // Méthode en uttilisant le principe des normales 
-   bool Obstacle::intersection_normale_ouverte(const Segment& s) const {
+   bool intersection_normale_ouverte(const Segment& s) const {
     for (size_t i = 0; i < sommets.size(); i++) {
         Sommet A = sommets[i];
         Sommet B = sommets[(i + 1) % sommets.size()]; // Arête suivante (fermeture du polygone)
@@ -190,17 +190,16 @@ public:
         }
     }
 
-    bool intersection (const Segment& s, int methode) const {
-        bool T;
-        if (methode =1){ T = intersection_ouvertferme(s);}
-        if (methode =2){ T = intersection_RayTracing(s);}
-        if (methode =3){ T = intersection_normale_ouverte(s);}
-        if (methode =0 || methode >3) {cout<<"methode non defini";}
-        return T;
+    return false;
+    }
+    bool intersection (const Segment& s, int methode=1) const {
+        if (methode =1){ return intersection_ouvertferme(s);}
+        if (methode =2){ return intersection_RayTracing(s);}
+        if (methode =3){ return intersection_normale_ouverte(s);}
+        if (methode =0 || methode >3) {cout<<"methode non defini"; exit(-1);}
+        return 0;
     }
     
-    return false;
-}
 
     // Ces fonctions vont être utiles pour vérifier si deux obstacles se chevauchent pour l'exemple interactif (7)
     bool contient_point(const Sommet& s) const {

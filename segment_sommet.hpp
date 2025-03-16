@@ -48,7 +48,7 @@ public:
     }
 
     bool operator==(const Sommet& other) const {
-    return (x == other.x) && (y == other.y);
+    return (abs(x- other.x)<1e-9) && (abs(y - other.y)<1e-9);
 }
 
 };
