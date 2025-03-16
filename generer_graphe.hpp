@@ -225,5 +225,75 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_lis
     
     return {G, list_sommet, list_indice, list_ref};
 }
+GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const vector<pair<Obstacle, int>>& list_gobs, bool padded=false, int methode=1) {
+    Graph G;
+    
+    if(methode != 1 && methode !=2){
+        cout<<"\n methode non attribuée \n selection de la methode par default \n"; 
+        methode =1;
+    }
+
+    // ----------- Initialisation des listes ---------------
+
+    int n = 2;
+    for (auto& obs : list_gobs) {
+        n += obs.first.sommets.size();
+    }
+
+    int nb_sommet = n;  // Nombre total de sommets dans le graphe
+    vector<Sommet> list_sommet(n);
+    vector<int> list_indice(n);
+    vector<int> list_ref(n);
+
+    int k = 1;
+    for (auto& obst : list_gobs) {
+        for (auto& S : obst.first.sommets) {
+            list_sommet[k] = S;
+            list_indice[k] = k;
+            list_ref[k] = obst.second;
+            k++;
+        }
+    }
+
+    list_sommet[0] = D;
+    list_indice[0] = 0;
+    list_ref[0] = 0;
+
+    list_sommet[n - 1] = A;
+    list_indice[n - 1] = n - 1;
+    list_ref[n - 1] = -1;
+
+    // int ref = 1;        // Référence de l'obstacle
+    // int ref_prem = 1;   // Référence du premier sommet de l'obstacle
+
+    for (int i = 0; i < nb_sommet ; i++) { // Boucle sur tous les sommets
+        for (int j = 0; j < i; j++ ){
+            if(i != j){ // Pas d'arc (i->j)
+                Segment iter_seg(list_sommet[i], list_sommet[j]);
+                bool inter = false; // Innocent jusqu'à preuve du contraire
+
+                for (auto& gobs : list_gobs) {
+                    if(methode ==1){ if (gobs.first.intersection_ouvertferme(iter_seg)) inter = true; }
+                    if(methode ==2){ if (gobs.first.intersection_RayTracing(iter_seg)) inter = true; }
+                }
+
+                if (!inter) {
+                    Arc iter_arc(list_indice[i], list_indice[j], iter_seg.longueur());
+                    cout << iter_seg << '\n';
+                    G.add(iter_arc);
+                    G.add(inverse(iter_arc));
+                    cout << iter_arc << " " << i << "," << j << " \n";
+                }
+            }
+        }
+    }
+    
+    return {G, list_sommet, list_indice, list_ref};
+}
+
+
+
+
+
 
 #endif // GENERER_GRAPHE_HPP;
