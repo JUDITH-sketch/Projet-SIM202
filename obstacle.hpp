@@ -193,10 +193,10 @@ public:
     return false;
     }
     bool intersection (const Segment& s, int methode=1) const {
-        if (methode =1){ return intersection_ouvertferme(s);}
-        if (methode =2){ return intersection_RayTracing(s);}
-        if (methode =3){ return intersection_normale_ouverte(s);}
-        if (methode =0 || methode >3) {cout<<"methode non defini"; exit(-1);}
+        if (methode == 1){ return intersection_ouvertferme(s);}
+        if (methode == 2){ return intersection_RayTracing(s);}
+        if (methode == 3){ return intersection_normale_ouverte(s);}
+        if (methode == 0 || methode >3) {cout<<"methode non defini"; exit(-1);}
         return 0;
     }
     
@@ -268,7 +268,7 @@ public:
     Obstacle Paddington(int Discret_cercle = 4, double Rayon=0.1 ) const{
         int n = sommets.size();
         vector<Sommet> padding;
-        double angle = 360./Discret_cercle;
+        //double angle = 360./Discret_cercle;
         for(int k =0;k<n;k++){
             cout<<'\n'<<"================================="<<'\n';
             Sommet Sommet_topadd = sommets[k];
