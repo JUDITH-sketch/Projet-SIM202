@@ -189,6 +189,15 @@ public:
             return true;
         }
     }
+
+    bool intersection (const Segment& s, int methode) const {
+        bool T;
+        if (methode =1){ T = intersection_ouvertferme(s);}
+        if (methode =2){ T = intersection_RayTracing(s);}
+        if (methode =3){ T = intersection_normale_ouverte(s);}
+        if (methode =0 || methode >3) {cout<<"methode non defini";}
+        return T;
+    }
     
     return false;
 }

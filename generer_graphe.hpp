@@ -18,7 +18,7 @@ struct GraphData {
 };
 
 // On assume qu'un obstacle ne possède pas plus de 100 points
-GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs,bool padding, int methode=1) {
+GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, int methode=1) {
     Graph G;
 
     if(methode != 1 && methode !=2){cout<<"methode non attribué"; methode =1;}
@@ -149,7 +149,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 }
 
 
-GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, bool padded=false, int methode=1) {
+GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, int methode=1) {
     Graph G;
     
     if(methode != 1 && methode !=2){cout<<"\n methode non attribuée \n selection de la methode par default \n"; methode =1;}
