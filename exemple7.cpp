@@ -64,16 +64,16 @@ int main() {
         Obstacle O(sommets);
         obstacles.push_back(make_pair(O, i+1));
     }
-    // Vérification des chevauchements
-    vector<Obstacle> liste_obstacles;
-    for (const auto& p : obstacles) {
-        liste_obstacles.push_back(p.first);
-    }
+    // // Vérification des chevauchements
+    // vector<Obstacle> liste_obstacles;
+    // for (const auto& p : obstacles) {
+    //     liste_obstacles.push_back(p.first);
+    // }
 
-    if (obstacles_se_chevauchent(obstacles)) {
-        cout << "Les obstacles se chevauchent, arrêt du programme." << endl;
-         exit(1);
-    }
+    // if (obstacles_se_chevauchent(obstacles)) {
+    //     cout << "Les obstacles se chevauchent, arrêt du programme." << endl;
+    //      exit(1);
+    // }
     
     // ========== Construction du Graphe ==========
     cout << "\n===== Construction du Graphe =====\n";
