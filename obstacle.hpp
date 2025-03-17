@@ -268,7 +268,6 @@ public:
     Obstacle Paddington(int Discret_cercle = 4, double Rayon=0.1 ) const{
         int n = sommets.size();
         vector<Sommet> padding;
-        //double angle = 360./Discret_cercle;
         for(int k =0;k<n;k++){
             cout<<'\n'<<"================================="<<'\n';
             Sommet Sommet_topadd = sommets[k];
