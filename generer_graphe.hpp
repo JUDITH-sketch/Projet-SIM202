@@ -146,7 +146,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 }
 
 
-GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const initializer_list<Gobstacle> list_gobs, int methode=3) {
+GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const std::vector<std::pair<Obstacle, int>>& list_gobs, bool padded = false, int methode = 1) {
     Graph G;
     
     if(methode != 1 && methode !=2){cout<<"\n methode non attribuée \n selection de la methode par default \n"; methode =1;}
