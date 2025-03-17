@@ -36,19 +36,37 @@ La classe arc contient les fonctions suivantes : constructeurs, et autre fonctio
 La classe graphe quant à elle contient tous les outils qui pourraient être attendus dans l'implémentation d'un graph : constructeurs, liste de voisins, ajout d'un arc au graphe, et différentes fonctions d'affichage. 
 
 // generer_graph_naif.hpp
-
+Ce fichier contient une version simplifiée et exhaustive de la génération du graphe sans optimisation. Il contient la fonction to_graph_Naive_3 (génération d’un graphe en testant toutes les connexions possibles entre sommets).
 // generer_graph.hpp
-
+Ce fichier génère le graphe en tenant compte des obstacles en connectant les sommets valides. Il contient les fonctions suivantes : to_graph (création du graphe en appliquant les méthodes d’intersection), ajouter_arcs (ajout des arcs valides), et des fonctions d'affichage
 // dijkstra.hpp 
-
+Ce fichier implémente l'algorithme de Dijkstra pour trouver le plus court chemin dans un graphe. Il contient les fonctions suivantes : dijkstra (calcul des distances minimales), reconstruct_path (reconstruction du chemin optimal), et des fonctions d'affichage des résultats.
 // generer_txt.hpp
-
+Ce fichier exporte les données du graphe vers un fichier texte pour être exploité par le programme Python. Il contient la fonction exporter_graphe_vers_fichier (écriture des sommets, des arcs et du chemin optimal dans un fichier texte).
 II° Les fichiers test_X.cpp
+Ces fichiers test permettent de tester les fonctions de manière individuelles. Pour les tester il suffit de les compiler individuellement et de se référer au rapport pour savoir ce qui est tester dans ce fichier. La compilation de ces fichiers n'est pas géré par le makefile. 
 
 III° Routines Python
-
+Ces fichiers est compilé dans le makefile il n'est pas nécessaire de les compiler. Ils servent à faire la visualisation des exemples. 
 IV° Les fichiers exemple_X.cpp
+Ces différents fichiers permettent finalement d'appliquer notre programme à plusieurs cas. A chaque fois le cas testé est précisé en commentaire en haut du fichier d'exemple. 
+Finalement pour éxécuter notre programme vous n'avez qu'a faire make puis préciser le numéro de l'exemple que vous voulez tester. Une fichier "figure.png" se créera et vous permettra de visualiser l'exemple que vous venez de tester. 
+Petit rappel des exemples testés : 
 
+- Exemple 1 : un carré simple c'est l'exemple de base de l'énnoncé
+- Exemple 2 :  Deux exemples dont un pentagone (utile pour exemple d'alignement des points)
+- Exemple 3 : Exemple complexe de l'ennoncé
+- Exemple 4 : Exemple Haie 
+- Exemple 5 : Obstacle carré avec trois points alignés 
+- Exemple 6 : Obstacle généré de manière aléatoire
+- Exemple 7 : Configuration entièrement choisie par l'utilisateur
+
+Dernière remarque pour la compilation : 
+
+- il existe trois méthode pour l'intersection elles ont des numéros  1(Ray-Tracing), 2(Segments_ouverts_fermés), 3(Normales). On a la possibilité de run le code avec chacune des méthodes en allant modifier dans to_graph_naive_3  présent dans le fichier generer_graph. le numéro passé en argument.
+- Il existe une option padding que l'on peut activer en mettant true de même dans to_graph_naive_3 également
 V° Makefile
 
 
+- faire make pour éxécuter les exemples
+- faire make clean pour se débarasser des fichier .x et du fichier texte intermédiaire
