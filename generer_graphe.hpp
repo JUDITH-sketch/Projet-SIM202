@@ -34,6 +34,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
     vector<int> list_indice(n);
     vector<int> list_ref(n);
 
+    // fixe les sommets,indice et référence d'obstacles dans les listes
     int k = 1;
     for (auto& obst : list_gobs) {
         for (auto& S : obst.first.sommets) {
@@ -44,6 +45,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         }
     }
 
+    // Cas particulier du point de départ et d'arrivée
     list_sommet[0] = D;
     list_indice[0] = 0;
     list_ref[0] = 0;
@@ -52,6 +54,9 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
     list_indice[n - 1] = n - 1;
     list_ref[n - 1] = -1;
 
+    // est considéré comme segment interne 
+    // tout segment qui part d'un obstacle 
+    // et fini dans le même obstacle. 
     cout << "\n----------------- Obstacle Interne -------------\n";
 
     // Ajoute obstacle_k -> obstacle_k
@@ -59,7 +64,7 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
     int ref_prem = 1;   // Référence du premier sommet de l'obstacle
 
     for (int k = 1; k < nb_sommet; k++) {
-        if (list_ref[k + 1] == ref) {
+        if (list_ref[k + 1] == ref) { // si le prochain sommet fait aussi partie de l'obstacle on l'ajoute
             Segment iter_seg(list_sommet[k], list_sommet[k + 1]);
             Arc iter_arc(list_indice[k], list_indice[k + 1], iter_seg.longueur());
             G.add(iter_arc);
@@ -67,8 +72,9 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
 
             cout << iter_arc << " \n";
         } 
-        else {
-            if (ref_prem != nb_sommet - 1) { // N'envoie pas le dernier sommet sur lui-même
+        else {  // Il s'agit du dernier sommet de l'obstacle,
+                // On le connecte avec le premier sommet de l'obstacle
+            if (ref_prem != nb_sommet - 1) { // Sauf si il s'agit du dernier sommet du dernier obstacle
                 Segment iter_seg(list_sommet[k], list_sommet[ref_prem]);
                 Arc iter_arc(list_indice[k], list_indice[ref_prem], iter_seg.longueur());
 
@@ -85,11 +91,16 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
     }
 
     // ----------------- Obstacle Externe -------------
+    // On définit tout segments externe
+    // Un segment qui part d'un obstacle
+    // et fini dans un autre obtacle ou le départ / l'arrivée
+
     cout << "\n----------------- Obstacle Externe -------------\n";
 
     for (int i = 1; i < nb_sommet - 1; i++) { // Boucle sur tous les sommets
         cout << "\n----------------- Obstacle Externe Sommet -- " << i << " ----------\n";
 
+        // On test d'abord si il est connecté avec le départ ou l'arrivée
         Segment DS(D, list_sommet[i]);
         Segment SA(list_sommet[i], A);
 
@@ -120,18 +131,20 @@ GraphData to_graph_Naive_2(const Sommet D, const Sommet A, const initializer_lis
         }
 
         // ----------------- Obstacle Externe Obstacles -------------
+        // puis avec des sommets d'autres obstacles
         cout << "\n----------------- Obstacle Externe Obstacles -------------\n";
+
 
         for (int j = 1; j < nb_sommet - 1; j++) { // Boucle sur les sommets non extrêmes
             if (list_ref[i] != list_ref[j]) { // Différents obstacles
                 Segment iter_seg(list_sommet[i], list_sommet[j]);
                 bool inter = false; // Innocent jusqu'à preuve du contraire
 
-                for (auto& gobs : list_gobs) {
+                for (auto& gobs : list_gobs) { // est-ce que le segment intersecte un obstacle
                     if (gobs.first.intersection(iter_seg,methode)){ inter = true;}
                 }
 
-                if (!inter) {
+                if (!inter) { // si il n'y a pas d'intersection, on l'ajoute au graphe
                     Arc iter_arc(list_indice[i], list_indice[j], iter_seg.longueur());
                     cout << iter_seg << '\n';
                     G.add(iter_arc);
@@ -176,6 +189,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const std::vector<std
     vector<int> list_indice(n);
     vector<int> list_ref(n);
 
+    // fixe les sommets,indice et référence d'obstacles dans les listes
     int k = 1;
     for (auto& obst : list_gobs) {
         for (auto& S : obst.first.sommets) {
@@ -186,7 +200,7 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const std::vector<std
         }
     }
 
-
+    // Cas particulier du point de départ et d'arrivée
     list_sommet[0] = D;
     list_indice[0] = 0;
     list_ref[0] = 0;
@@ -195,8 +209,6 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const std::vector<std
     list_indice[n - 1] = n - 1;
     list_ref[n - 1] = -1;
 
-    // int ref = 1;        // Référence de l'obstacle
-    // int ref_prem = 1;   // Référence du premier sommet de l'obstacle
 
     for (int i = 0; i < nb_sommet ; i++) { // Boucle sur tous les sommets
         for (int j =0; j< i; j++ ){
@@ -204,12 +216,12 @@ GraphData to_graph_Naive_3(const Sommet D, const Sommet A, const std::vector<std
                 Segment iter_seg(list_sommet[i], list_sommet[j]);
                 bool inter = false; // Innocent jusqu'à preuve du contraire
 
-                for (auto& gobs : list_gobs) {
+                for (auto& gobs : list_gobs) { // check si il y a intersection avec l'un des obstacles
                     if (gobs.first.intersection(iter_seg,methode)){ inter = true;}
                     
                 }
 
-                if (!inter) {
+                if (!inter) { // si il n'y a pas d'intersection, on l'ajoute au graphe
                     Arc iter_arc(list_indice[i], list_indice[j], iter_seg.longueur());
                     cout << iter_seg << '\n';
                     G.add(iter_arc);

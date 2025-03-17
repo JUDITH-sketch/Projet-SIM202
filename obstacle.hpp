@@ -136,7 +136,7 @@ public:
         return (count % 2 == 1); // Impair = intérieur, Pair = extérieur
     }
 
-    // //Vérifie si un segment a au moins un point strictement à l'intérieur
+    //Vérifie si un segment a au moins un point strictement à l'intérieur
     bool intersection_RayTracing(const Segment& seg, int samplePoints = 100) const {
         for (int i = 1; i <= samplePoints; i++) {
             double t = (double)i / (samplePoints + 1);
@@ -192,6 +192,8 @@ public:
 
     return false;
     }
+
+    // permet de choisir la méthode d'intersection voulu
     bool intersection (const Segment& s, int methode=1) const {
         if (methode == 1){ return intersection_ouvertferme(s);}
         if (methode == 2){ return intersection_RayTracing(s);}
@@ -266,16 +268,17 @@ return false; // Aucun chevauchement détecté
 
     
     
-/// Le padding 
+    /// Le padding 
     // Padd un obstacle
-    Obstacle Paddington(int Discret_cercle = 4, double Rayon=0.1 ) const{
+    Obstacle Paddington(int Discret_cercle = 4, double Rayon=0.3 ) const{
         int n = sommets.size();
         vector<Sommet> padding;
         for(int k =0;k<n;k++){
             cout<<'\n'<<"================================="<<'\n';
-            Sommet Sommet_topadd = sommets[k];
+            Sommet Sommet_topadd = sommets[k]; // on considère un sommet de l'obstacle
             cout<<"Sommet to padd : "<<Sommet_topadd<<'\n';
 
+            // On donne les segments qui arrive et qui partent de ce sommet
             Sommet X;Sommet Y;
             Segment pred(X,Y); Segment succ(X,Y);
 
@@ -285,25 +288,28 @@ return false; // Aucun chevauchement détecté
             if(k!=0){   pred= Segment(sommets[k-1],Sommet_topadd);}
             else {      pred = Segment(sommets[n-1],Sommet_topadd);}
 
+            // On considère les vecteurs normales unitaire de ces segments
             Sommet e1 = -succ.normale() *(1/ (succ.longueur()));
             Sommet e2 = pred.normale()*(1/ (pred.longueur()));
             
+            // On regarde si le sommet_k est un point entrant ou sortant 
             bool point_entrant = false;
             if(e1.x * e2.y - e1.y * e2.x<=0){point_entrant=true;}
             
             double angle = std::acos((e1.x*e2.x - e1.y*e2.y)/2); // angle entre e1 et e2
-            double alpha_base = atan2(e1.y,e1.x) +angle ;
+            double alpha_base = atan2(e1.y,e1.x) +angle ; //angle entre l'axe des x et e1
 
-            Sommet u1(1,0) , u2(0,1);
-            if(!point_entrant){
+            Sommet u1(1,0) , u2(0,1); // vecteurs unitaire de base
+            if(!point_entrant){ // si le sommet est un point sortant
                 angle /= Discret_cercle;
 
                 for(int i=0;i<= Discret_cercle;i++){
                     cout<<'\n'<<"-----------"<<k<<"-"<<i<<"----------"<<'\n';
-                    Sommet Sommet_test = Sommet_topadd + Rayon*(u2*sin(-i*angle+alpha_base) + u1*cos(-i*angle+alpha_base));
-                    cout<<Sommet_test;
+                    Sommet Sommet_test = Sommet_topadd + Rayon*(u2*sin(-i*angle+alpha_base) + u1*cos(-i*angle+alpha_base)); // sommet qui constituera le padding
                     
                     // padding.push_back(Sommet_test);
+
+                    // On test si ce sommet est à une distance >R de l'obstacle (donc à une distance >R de chacun des segments)
                     if(!isPointInside(Sommet_test)){
                         cout<<"Point not inside"<<'\n';
                         double d1 = pred.distance(Sommet_test);
@@ -316,9 +322,9 @@ return false; // Aucun chevauchement détecté
                     }
                 }
             }
-            else{
+            else{ // si le sommet est un point entrant
                 
-                Sommet u1(1,0) , u2(0,1);
+                // On ajoute le sommet situé à une distance R de sommet_k et situé sur la bisectrice de e1 et e2
                 Sommet Sommet_test = Sommet_topadd - Rayon/sin(angle/2)*(u2*sin(angle/2+alpha_base) + u1*cos(angle/2+alpha_base));
                 cout<<Sommet_test;
                     

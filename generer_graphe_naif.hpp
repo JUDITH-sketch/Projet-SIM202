@@ -1,3 +1,8 @@
+//===============================================================
+//                Version obsolète et vestiges
+//       montre la première manière pensé pour généré un graphe.
+//===============================================================
+
 #include "arc_graph.hpp"
 #include "obstacle.hpp"
 
