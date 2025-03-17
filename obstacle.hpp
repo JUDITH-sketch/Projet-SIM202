@@ -202,62 +202,65 @@ public:
     
 
     // // Ces fonctions vont être utiles pour vérifier si deux obstacles se chevauchent pour l'exemple interactif (7)
-    // bool contient_point(const Sommet& s) const {
-    //     int count = 0;
-    //     size_t n = sommets.size();
+    bool contient_point(const Sommet& s) const {
+        if (isOnBoundary(s)) return false; // Si le point est sur un bord, ce n'est pas un chevauchement
     
-    //     for (size_t i = 0; i < n; i++) {
-    //         Sommet A = sommets[i];
-    //         Sommet B = sommets[(i + 1) % n]; // Segment suivant (fermeture du polygone)
+        int count = 0;
+        size_t n = sommets.size();
     
-    //         // Vérifie si le point `s` est à gauche du segment (A,B) avec le produit vectoriel
-    //         if (((A.y <= s.y && s.y < B.y) || (B.y <= s.y && s.y < A.y)) &&
-    //             (s.x < (B.x - A.x) * (s.y - A.y) / (B.y - A.y) + A.x)) {
-    //             count++;
-    //         }
-    //     }
+        for (size_t i = 0; i < n; i++) {
+            Sommet A = sommets[i];
+            Sommet B = sommets[(i + 1) % n];
     
-    //     // Si le nombre d'intersections est impair, le point est à l'intérieur
-    //     return count % 2 == 1;
-    // }
+            if (((A.y <= s.y && s.y < B.y) || (B.y <= s.y && s.y < A.y)) &&
+                (s.x < (B.x - A.x) * (s.y - A.y) / (B.y - A.y) + A.x)) {
+                count++;
+            }
+        }
+    
+        return count % 2 == 1; // si le nombre d'intersection est impair ce n'est pas un chevauchement
+    }
 
     // // Vérifie si deux obstacles se chevauchent
-    // bool obstacles_se_chevauchent(const vector<pair<Obstacle, int>>& obstacles) {
-    // // Parcours de tous les couples d'obstacles possibles
-    // for (size_t i = 0; i < obstacles.size(); i++) {
-    //     for (size_t j = i + 1; j < obstacles.size(); j++) {
-            
-    //         // Vérifie si un sommet d'un obstacle est à l'intérieur de l'autre
-    //         for (const auto& sommet : obstacles[i].first.sommets) { // Accès correct avec .first
-    //             if (obstacles[j].first.contient_point(sommet)) { // Vérification d'inclusion
-    //                 return true; // Il y a un chevauchement
-    //             }
-    //         }
-            
-    //         for (const auto& sommet : obstacles[j].first.sommets) {
-    //             if (obstacles[i].first.contient_point(sommet)) {
-    //                 return true;
-    //             }
-    //         }
+ static bool obstacles_se_chevauchent(const vector<pair<Obstacle, int>>& obstacles) {
+   // Parcours de tous les couples d'obstacles possibles
+   for (size_t i = 0; i < obstacles.size(); i++) {
+    for (size_t j = i + 1; j < obstacles.size(); j++) {
 
-    //         // Vérifie si les segments des deux obstacles s'intersectent
-    //         for (size_t a = 0; a < obstacles[i].first.sommets.size(); a++) {
-    //             Segment segA(obstacles[i].first.sommets[a], 
-    //                          obstacles[i].first.sommets[(a + 1) % obstacles[i].first.sommets.size()]);
+        // Vérifie si un sommet d'un obstacle est à l'intérieur de l'autre
+        for (const auto& sommet : obstacles[i].first.sommets) {
+            if (obstacles[j].first.contient_point(sommet)) {
+                return true; // Chevauchement détecté
+            }
+        }
 
-    //             for (size_t b = 0; b < obstacles[j].first.sommets.size(); b++) {
-    //                 Segment segB(obstacles[j].first.sommets[b], 
-    //                              obstacles[j].first.sommets[(b + 1) % obstacles[j].first.sommets.size()]);
+        for (const auto& sommet : obstacles[j].first.sommets) {
+            if (obstacles[i].first.contient_point(sommet)) {
+                return true;
+            }
+        }
 
-    //                 if (segA.intersection(segB)) { // Vérification d'intersection entre segments
-    //                     return true; // Chevauchement détecté
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    // return false; // Aucun chevauchement détecté
-    // }
+        // Vérifie si les segments des deux obstacles s'intersectent
+        for (size_t a = 0; a < obstacles[i].first.sommets.size(); a++) {
+            Segment segA(obstacles[i].first.sommets[a], 
+                         obstacles[i].first.sommets[(a + 1) % obstacles[i].first.sommets.size()]);
+
+            for (size_t b = 0; b < obstacles[j].first.sommets.size(); b++) {
+                Segment segB(obstacles[j].first.sommets[b], 
+                             obstacles[j].first.sommets[(b + 1) % obstacles[j].first.sommets.size()]);
+
+                // 🔹 [NOUVEAU] Vérification : Si les arêtes sont exactement identiques, on ignore
+                if (segA == segB) continue; 
+
+                if (segA.intersection(segB)) {
+                    return true; // Chevauchement détecté
+                }
+            }
+        }
+    }
+}
+return false; // Aucun chevauchement détecté
+     }
 
     
 
