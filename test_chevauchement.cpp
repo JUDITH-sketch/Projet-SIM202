@@ -8,7 +8,7 @@ int main() {
     Obstacle O2({{3,3}, {3,5}, {5,5}, {5,3}});  // Carré éloigné
     std::vector<std::pair<Obstacle, int>> obstacles1 = {{O1, 1}, {O2, 2}};
     std::cout << "Chevauchement détecté ? " 
-              << (obstacles_se_chevauchent(obstacles1) ? "TRUE" : "FALSE") 
+              << (Obstacle :: obstacles_se_chevauchent(obstacles1) ? "TRUE" : "FALSE") 
               << "\n"; // Doit afficher FALSE
 
     // ==================== CAS 2 : Un obstacle contenu dans un autre ====================
@@ -17,7 +17,7 @@ int main() {
     Obstacle O4({{1,1}, {1,2}, {2,2}, {2,1}});  // Petit carré contenu
     std::vector<std::pair<Obstacle, int>> obstacles2 = {{O3, 1}, {O4, 2}};
     std::cout << "Chevauchement détecté ? " 
-              << (obstacles_se_chevauchent(obstacles2) ? "TRUE" : "FALSE") 
+              << (Obstacle :: obstacles_se_chevauchent(obstacles2) ? "TRUE" : "FALSE") 
               << "\n"; // Doit afficher TRUE
 
     // ==================== CAS 3 : Obstacles partageant une arête ====================
@@ -26,7 +26,7 @@ int main() {
     Obstacle O6({{2,0}, {2,2}, {4,2}, {4,0}}); // Partage le bord droit de O5
     std::vector<std::pair<Obstacle, int>> obstacles3 = {{O5, 1}, {O6, 2}};
     std::cout << "Chevauchement détecté ? " 
-              << (obstacles_se_chevauchent(obstacles3) ? "TRUE" : "FALSE") 
+              << (Obstacle :: obstacles_se_chevauchent(obstacles3) ? "TRUE" : "FALSE") 
               << "\n"; // Doit afficher FALSE selon l'implémentation
 
     // ==================== CAS 4 : Obstacles avec intersection ====================
@@ -35,7 +35,7 @@ int main() {
     Obstacle O8({{1,1}, {1,3}, {3,3}, {3,1}}); // Se croise avec O7
     std::vector<std::pair<Obstacle, int>> obstacles4 = {{O7, 1}, {O8, 2}};
     std::cout << "Chevauchement détecté ? " 
-              << (obstacles_se_chevauchent(obstacles4) ? "TRUE" : "FALSE") 
+              << (Obstacle :: obstacles_se_chevauchent(obstacles4) ? "TRUE" : "FALSE") 
               << "\n"; // Doit afficher TRUE
 
     // ==================== CAS 5 : Un sommet sur le bord de l'autre ====================
@@ -44,7 +44,7 @@ int main() {
     Obstacle O10({{2,2}, {3,3}, {4,2}, {3,1}}); // Son sommet (2,2) touche le bord de O9
     std::vector<std::pair<Obstacle, int>> obstacles5 = {{O9, 1}, {O10, 2}};
     std::cout << "Chevauchement détecté ? " 
-              << (obstacles_se_chevauchent(obstacles5) ? "TRUE" : "FALSE") 
+              << (Obstacle :: obstacles_se_chevauchent(obstacles5) ? "TRUE" : "FALSE") 
               << "\n"; // Doit afficher FALSE
 
     return 0;
